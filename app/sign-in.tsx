@@ -58,9 +58,12 @@ export default function SignIn() {
 					<Controller
 						control={control}
 						rules={{ required: fieldRequired, pattern: emailPattern, maxLength: maxEmailLength }}
-						render={() => (
+						render={({ field: { onChange, onBlur, value } }) => (
 							<TextField
 								placeholder="Enter email address"
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
 							/>
 						)}
 						name="email"
@@ -71,6 +74,9 @@ export default function SignIn() {
 						render={({ field: { onChange, onBlur, value } }) => (
 							<TextField
 								placeholder="Enter password"
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
 							/>
 						)}
 						name="password"
