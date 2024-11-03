@@ -1,6 +1,7 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
 import TextField from "@/components/TextField";
+import { emailPattern, fieldRequired, maxEmailLength, maxPasswordLength, minPasswordLength } from "@/utils/validation";
 import { Link } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
@@ -33,6 +34,7 @@ export default function SignIn() {
 				<View className="flex flex-col gap-6">
 					<Controller
 						control={control}
+						rules={{ required: fieldRequired, pattern: emailPattern, maxLength: maxEmailLength }}
 						render={() => (
 							<TextField
 								placeholder="Enter email address"
@@ -42,6 +44,7 @@ export default function SignIn() {
 					/>
 					<Controller
 						control={control}
+						rules={{ required: fieldRequired, minLength: minPasswordLength, maxLength: maxPasswordLength }}
 						render={({ field: { onChange, onBlur, value } }) => (
 							<TextField
 								placeholder="Enter password"
