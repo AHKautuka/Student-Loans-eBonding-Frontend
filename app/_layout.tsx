@@ -1,10 +1,22 @@
 import { Stack } from "expo-router";
 import "../global.css";
+import { useEffect, useState } from "react";
+import { claim } from "@/dtos/authentication";
+import AuthenticationContext from "@/contexts/AuthenticationContext";
+import { getClaims } from "@/utils/handleJWT";
 
 export default function RootLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
+	const [claims, setClaims] = useState<claim[]>([]);
+	
+	useEffect(() => {
+		setClaims(getClaims());
+	}, []);
+	
+	return (
+		<AuthenticationContext.Provider value={{claims, update: setClaims}}>
+			<Stack>
+				<Stack.Screen name="index" />
+			</Stack>
+		</AuthenticationContext.Provider>
+	);
 }
