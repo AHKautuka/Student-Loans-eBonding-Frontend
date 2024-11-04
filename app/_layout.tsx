@@ -9,8 +9,12 @@ export default function RootLayout() {
 	const [claims, setClaims] = useState<claim[]>([]);
 	
 	useEffect(() => {
-		setClaims(getClaims());
+		onRerender();
 	}, []);
+	
+	async function onRerender() {
+		setClaims(await getClaims());
+	}
 	
 	return (
 		<AuthenticationContext.Provider value={{claims, update: setClaims}}>

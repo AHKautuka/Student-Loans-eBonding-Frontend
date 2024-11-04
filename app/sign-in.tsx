@@ -35,16 +35,16 @@ export default function SignIn() {
 	async function logIntoAccount(credentials: userCredentials) {
 		try {
 			const response = await axios.post<authenticationResponse>(`${urlAccounts}/login`, credentials);
-			saveToken(response.data);
-			update(getClaims());
+			await saveToken(response.data);
+			update(await getClaims());
 			router.navigate("/");
 		} catch (error: any) {
-			setError("root", { message: error.message })
+			setError("root", { message: error.message });
 		}
 	}
 	
 	const onSubmit: SubmitHandler<IFormInput> = (data) => {
-		logIntoAccount({ email: data.email, password: data.password })
+		logIntoAccount({ email: data.email, password: data.password });
 	}
 	
 	return (

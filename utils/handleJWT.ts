@@ -1,22 +1,23 @@
 import { authenticationResponse, claim } from "@/dtos/authentication";
 import { router } from "expo-router";
+import { getItem, removeItem, setItem } from "./asyncStorage";
 
 const tokenKey = 'token';
 const expirationKey = "token-expiration";
 
-export function saveToken(authData: authenticationResponse) {
-	localStorage.setItem(tokenKey, authData.token);
-	localStorage.setItem(expirationKey, authData.expiration.toString());
+export async function saveToken(authData: authenticationResponse) {
+	await setItem(tokenKey, authData.token);
+	await setItem(expirationKey, authData.expiration.toString());
 }
 
-export function getClaims(): claim[] {
-	const token = localStorage.getItem(tokenKey);
+export async function getClaims(): Promise<claim[]> {
+	const token = await getItem(tokenKey);
 	
 	if (!token) {
 		return [];
 	}
 	
-	const expiration = localStorage.getItem(expirationKey)!;
+	const expiration = (await getItem(expirationKey))!;
 	const expirationDate = new Date(expiration);
 	
 	if (expirationDate <= new Date()) {
@@ -33,12 +34,12 @@ export function getClaims(): claim[] {
 	return response;
 }
 
-export function logOut() {
-	localStorage.removeItem(tokenKey);
-	localStorage.removeItem(expirationKey);
+export async function logOut() {
+	await removeItem(tokenKey);
+	await removeItem(expirationKey);
 	router.navigate("/");
 }
 
-export function getToken() {
-	return localStorage.getItem(tokenKey);
+export async function getToken() {
+	return await getItem(tokenKey);
 }
