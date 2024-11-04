@@ -1,9 +1,15 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
 import TextField from "@/components/TextField";
+import AuthenticationContext from "@/contexts/AuthenticationContext";
+import { authenticationResponse, userCredentials } from "@/dtos/authentication";
+import { urlAccounts } from "@/utils/endpoints";
+import { getClaims, saveToken } from "@/utils/handleJWT";
 import { emailPattern, fieldRequired, maxEmailLength, maxPasswordLength, minPasswordLength } from "@/utils/validation";
-import { Link } from "expo-router";
-import { Controller, useForm } from "react-hook-form";
+import axios from "axios";
+import { Link, router } from "expo-router";
+import { useContext } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
 interface IFormInput {
@@ -24,7 +30,24 @@ export default function SignUp() {
 			password: '',
 			confirmPassword: '',
 		}
-	}); 
+	});
+	
+	const { update } = useContext(AuthenticationContext);
+	
+	async function registerAccount(credentials: userCredentials) {
+		try {
+			const response = await axios.post<authenticationResponse>(`${urlAccounts}/create`, credentials);
+			await saveToken(response.data);
+			update(await getClaims());
+			router.navigate("/");
+		} catch (error: any) {
+			setError("root", { message: error.message });
+		}
+	}
+	
+	const onSubmit: SubmitHandler<IFormInput> = (data) => {
+		registerAccount({ email: data.email, password: data.password });
+	}
 	
 	return (
 		<View className="flex flex-col items-center bg-[#F6F6F6]">
@@ -77,7 +100,7 @@ export default function SignUp() {
 				
 				<View className="flex flex-col fixed bottom-12 gap-8 items-center self-center">
 					<Link href="/">
-						<PrimaryButton text="Sign Up" />
+						<PrimaryButton text="Sign Up" onPress={handleSubmit(onSubmit)} />
 					</Link>
 					<Link href="/sign-in">
 						<SecondaryButton text="Sign In to Existing Account" />
