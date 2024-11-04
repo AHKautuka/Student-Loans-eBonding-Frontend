@@ -12,3 +12,9 @@ export interface authenticationResponse {
 	token: string;
 	expiration: Date;
 };
+
+export enum role {
+	Student = "Student",
+	LoansOfficial = "LoansBoardOfficial",
+	SchoolAdmin = "InstitutionAdministrator",
+};
