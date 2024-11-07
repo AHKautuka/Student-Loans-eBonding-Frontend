@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
@@ -29,4 +30,25 @@ export default function Index() {
 			</View>
 		</ScrollView>
 	);
+=======
+import React from "react";
+import { View } from "react-native";
+// import LoanAmount from "./screen/loan-amount";
+import BankDetails from "./screen/bank-details";
+import Toast from 'react-native-toast-message';
+import PersonalDetails from "./screen/personal-details";
+
+
+export default function Index() {
+  return (
+      <View style={{ flex: 1 }}>
+       <PersonalDetails />
+        <Toast />
+
+      </View>   
+
+  
+  );
+>>>>>>> 4ad04bb (personal details)
 }
+
