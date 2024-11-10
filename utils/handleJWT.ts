@@ -1,5 +1,4 @@
 import { authenticationResponse, claim } from "@/dtos/authentication";
-import { router } from "expo-router";
 import { getItem, removeItem, setItem } from "./asyncStorage";
 
 const tokenKey = 'token';
@@ -37,7 +36,6 @@ export async function getClaims(): Promise<claim[]> {
 export async function logOut() {
 	await removeItem(tokenKey);
 	await removeItem(expirationKey);
-	router.navigate("/");
 }
 
 export async function getToken() {
