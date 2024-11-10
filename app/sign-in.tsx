@@ -1,5 +1,6 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
+import HeadingText from "@/components/text/HeadingText";
 import TextField from "@/components/TextField";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { authenticationResponse, userCredentials } from "@/dtos/authentication";
@@ -7,10 +8,10 @@ import { urlAccounts } from "@/utils/endpoints";
 import { getClaims, saveToken } from "@/utils/handleJWT";
 import { emailPattern, fieldRequired, maxEmailLength, maxPasswordLength, minPasswordLength } from "@/utils/validation";
 import axios from "axios";
-import { Link, router } from "expo-router";
-import { useContext } from "react";
+import { router, useNavigation } from "expo-router";
+import { useContext, useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 interface IFormInput {
 	email: string;
@@ -18,6 +19,12 @@ interface IFormInput {
 }
 
 export default function SignIn() {
+	const navigation = useNavigation();
+	
+	useEffect(() => {
+	  navigation.setOptions({ headerShown: false });
+	}, [navigation]);
+	
 	const {
 		control,
 		handleSubmit,
@@ -37,7 +44,8 @@ export default function SignIn() {
 			const response = await axios.post<authenticationResponse>(`${urlAccounts}/login`, credentials);
 			await saveToken(response.data);
 			update(await getClaims());
-			router.navigate("/");
+			router.replace("/home");
+			router.dismissAll();
 		} catch (error: any) {
 			setError("root", { message: error.message });
 		}
@@ -48,50 +56,62 @@ export default function SignIn() {
 	}
 	
 	return (
-		<View className="flex flex-col items-center bg-[#F6F6F6]">
-			<View className="justify-center items-center w-32 h-32 m-16 bg-[#C9C9C9]"><Text>Image Placeholder</Text></View>
-			
-			<View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }} className="w-full h-screen p-8 bg-white border-t border-x border-[#959595]">
-				<Text className="text-4xl font-semibold pb-8">Sign In to Account</Text>
+		<ScrollView className="bg-[#F6F6F6]">
+			<View className="flex flex-col h-screen items-center">
+				<View className="justify-center items-center w-32 h-32 m-16 bg-[#C9C9C9]"><Text>Image Placeholder</Text></View>
 				
-				<View className="flex flex-col gap-6">
-					<Controller
-						control={control}
-						rules={{ required: fieldRequired, pattern: emailPattern, maxLength: maxEmailLength }}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<TextField
-								placeholder="Enter email address"
-								onBlur={onBlur}
-								onChangeText={onChange}
-								value={value}
+				<View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }} className="flex-auto w-full min-h-fit p-8 bg-white border-t border-x border-[#959595]">
+					<HeadingText>Sign In to Account</HeadingText>
+					
+					<View className="flex flex-col gap-4">
+						<View className="gap-2">
+							<Controller
+								control={control}
+								rules={{ required: fieldRequired, pattern: emailPattern, maxLength: maxEmailLength }}
+								render={({ field: { onChange, onBlur, value } }) => (
+									<TextField
+										placeholder="Enter email address"
+										onBlur={onBlur}
+										onChangeText={onChange}
+										value={value}
+									/>
+								)}
+								name="email"
 							/>
-						)}
-						name="email"
-					/>
-					<Controller
-						control={control}
-						rules={{ required: fieldRequired, minLength: minPasswordLength, maxLength: maxPasswordLength }}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<TextField
-								placeholder="Enter password"
-								onBlur={onBlur}
-								onChangeText={onChange}
-								value={value}
+							{
+								errors.email?.message ? <Text className="text-base font-semibold text-red-600">{errors.email?.message}</Text> : <View className="h-[1.5rem]" />
+							}
+						</View>
+						<View className="gap-2">
+							<Controller
+								control={control}
+								rules={{ required: fieldRequired, minLength: minPasswordLength, maxLength: maxPasswordLength }}
+								render={({ field: { onChange, onBlur, value } }) => (
+									<TextField
+										placeholder="Enter password"
+										onBlur={onBlur}
+										onChangeText={onChange}
+										value={value}
+										secureTextEntry={true}
+									/>
+								)}
+								name="password"
 							/>
-						)}
-						name="password"
-					/>
-				</View>
-				
-				<View className="flex flex-col fixed bottom-12 gap-8 items-center self-center">
-					<Link href="/">
+							{
+								errors.password?.message ? <Text className="text-base font-semibold text-red-600">{errors.password?.message}</Text> : <View className="h-[1.5rem]" />
+							}
+						</View>
+					</View>
+					{
+						errors.root?.message ? <Text className="text-base font-semibold text-red-600">{errors.root?.message}</Text> : <View className="h-[1.5rem]" />
+					}
+					
+					<View className="flex flex-col pt-8 pb-12 gap-8 items-center self-center">
 						<PrimaryButton text="Sign In" onPress={handleSubmit(onSubmit)} />
-					</Link>
-					<Link href="/sign-up">
-						<SecondaryButton text="Go to Register New Account" />
-					</Link>
+						<SecondaryButton text="Go to Sign Up" onPress={() => router.push("/sign-up")} />
+					</View>
 				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 }
