@@ -1,3 +1,3 @@
-const baseURL = "";//process.env.REACT_APP_API_URL;
+const baseURL = process.env.EXPO_PUBLIC_API_URL;
 
 export const urlAccounts = `${baseURL}/accounts`;
