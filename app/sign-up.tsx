@@ -127,7 +127,7 @@ export default function SignUp() {
 						errors.root?.message ? <Text className="text-base font-semibold text-red-600">{errors.root?.message}</Text> : <View className="h-[1.5rem]" />
 					}
 					
-					<View className="flex flex-col pt-8 pb-12 gap-8 items-center self-center">
+					<View className="flex flex-col mt-8 mb-12 gap-8 items-center self-center">
 						<PrimaryButton text="Sign Up" onPress={handleSubmit(onSubmit)} />
 						<SecondaryButton text="Go to Sign In" onPress={() => router.push("/sign-in")} />
 					</View>
