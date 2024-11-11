@@ -20,6 +20,8 @@ export default function RootLayout() {
 		<AuthenticationContext.Provider value={{claims, update: setClaims}}>
 			<Stack>
 				<Stack.Screen name="index" />
+				<Stack.Screen name="sign-in" options={{ headerShown: false }} />
+				<Stack.Screen name="sign-up" options={{ headerShown: false }} />
 			</Stack>
 		</AuthenticationContext.Provider>
 	);

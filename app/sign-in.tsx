@@ -19,12 +19,6 @@ interface IFormInput {
 }
 
 export default function SignIn() {
-	const navigation = useNavigation();
-	
-	useEffect(() => {
-	  navigation.setOptions({ headerShown: false });
-	}, [navigation]);
-	
 	const {
 		control,
 		handleSubmit,

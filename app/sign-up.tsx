@@ -20,12 +20,6 @@ interface IFormInput {
 }
 
 export default function SignUp() {
-	const navigation = useNavigation();
-  
-	useEffect(() => {
-	  navigation.setOptions({ headerShown: false });
-	}, [navigation]);
-	
 	const {
 		control,
 		handleSubmit,
