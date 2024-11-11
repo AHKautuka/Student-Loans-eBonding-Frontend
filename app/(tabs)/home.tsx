@@ -22,8 +22,7 @@ export default function HomePage() {
 			
 			<SecondaryButton text="Log Out" onPress={() => {
 				logOut();
-				router.push("/");
-				router.dismissAll();
+				router.replace("/");
 			}} />
 		</ScrollView>
 	);
