@@ -3,7 +3,7 @@ import SecondaryButton from "@/components/buttons/SecondaryButton";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { router } from "expo-router";
 import React, { useContext, useEffect } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import HeadingText from "@/components/text/HeadingText";
 
 export default function Index() {
@@ -19,7 +19,7 @@ export default function Index() {
 		<ScrollView className="bg-[#F6F6F6]">
 			<View className="flex flex-col gap-6 p-8">
 				<HeadingText>Welcome to Student Loans eBonding</HeadingText>
-				<View className="justify-center items-center self-center w-[21.75rem] h-[20.3125rem] bg-[#C9C9C9]"><Text>Image Placeholder</Text></View>
+				<Image style={{ alignSelf: "center", width: 348, height: 325 }} source={require('@/assets/images/landing-page-main-image.jpg')} />
 				<Text className="text-xl font-semibold">This platform enables the loan bonding process to be completed digitally. Get started with an option below:</Text>
 				
 				<View className="flex flex-col pb-12 gap-8 items-center self-center">

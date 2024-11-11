@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import DetailsCard from "./DetailsCard";
 import DetailNameText from "../text/DetailNameText";
 import DetailValueText from "../text/DetailValueText";
@@ -13,7 +13,7 @@ export default function AccountDetailsCard(props : AccountDetailsCardProps) {
 	return (
 		<DetailsCard>
 			<Text className="text-xl font-semibold">Account Details</Text>
-			<View style={{ justifyContent: "center", width: 198, aspectRatio: 1, borderRadius: 9999 }} className="justify-center items-center self-center bg-[#C9C9C9]"><Text>Image Placeholder</Text></View>
+			<Image style={{ alignSelf: "center", width: 198, height: 198 }} source={require('@/assets/images/default-user-profile-picture.png')} />
 			<View style={{gap: 6}}>
 				<Text className="flex">
 					<DetailNameText>Email:</DetailNameText>

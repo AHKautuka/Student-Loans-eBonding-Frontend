@@ -1,5 +1,6 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
+import Logo from "@/components/Logo";
 import HeadingText from "@/components/text/HeadingText";
 import TextField from "@/components/TextField";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
@@ -52,7 +53,7 @@ export default function SignIn() {
 	return (
 		<ScrollView className="bg-[#F6F6F6]">
 			<View className="flex flex-col h-screen items-center">
-				<View className="justify-center items-center w-32 h-32 m-16 bg-[#C9C9C9]"><Text>Image Placeholder</Text></View>
+				<Logo center width={128} height={128} margin={64} />
 				
 				<View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }} className="flex-auto w-full min-h-fit p-8 bg-white border-t border-x border-[#959595]">
 					<HeadingText>Sign In to Account</HeadingText>
