@@ -2,13 +2,13 @@ import SecondaryButton from "@/components/buttons/SecondaryButton";
 import AccountDetailsCard from "@/components/cards/AccountDetailsCard";
 import HeadingText from "@/components/text/HeadingText";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
-import { logOut } from "@/utils/handleJWT";
+import { getClaims, logOut } from "@/utils/handleJWT";
 import { router } from "expo-router";
 import { useContext } from "react";
 import { ScrollView } from "react-native";
 
 export default function HomePage() {
-	const { claims } = useContext(AuthenticationContext);
+	const { claims, update } = useContext(AuthenticationContext);
 	
 	function getUserEmail(): string {
 		return claims.filter(x => x.name === "email")[0]?.value;
@@ -20,8 +20,9 @@ export default function HomePage() {
 			
 			<AccountDetailsCard userEmail={getUserEmail()} />
 			
-			<SecondaryButton text="Log Out" onPress={() => {
-				logOut();
+			<SecondaryButton text="Log Out" onPress={async () => {
+				await logOut();
+				update(await getClaims());
 				router.replace("/");
 			}} />
 		</ScrollView>
