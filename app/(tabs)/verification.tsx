@@ -1,3 +1,4 @@
+import Logo from '@/components/Logo';
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Image, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -68,10 +69,7 @@ const BondingFormReview: React.FC<BondingFormReviewProps> = ({ formId, userRole,
 
   return (
     <ScrollView style={styles.container}>
-      <Image
-        source={require('./path-to-logo/logo.png')} // Update the path to your logo file
-        style={styles.logo}
-      />
+      <Logo center width={128} height={128} />
 
       <Text style={styles.label}>Student Name: {form.studentName}</Text>
 
