@@ -39,13 +39,12 @@ const BondingFormReview: React.FC<BondingFormReviewProps> = ({ formId, userRole,
   }, [formId, userRole, institutionId]);
 
   const handleApprove = () => {
-    // Handle form approval without comment
     setForm({ ...form, status: 'approved' });
     Alert.alert('Success', 'Bonding form approved.');
   };
 
   const handleReject = () => {
-    setShowCommentInput(true); // Show the comment input field when rejecting
+    setShowCommentInput(true);
   };
 
   const handleConfirmReject = () => {
@@ -53,7 +52,6 @@ const BondingFormReview: React.FC<BondingFormReviewProps> = ({ formId, userRole,
       Alert.alert('Error', 'Please add a comment before rejecting the form.');
       return;
     }
-    // Handle form rejection with comment
     setForm({ ...form, status: 'rejected', comments: [...form.comments, comment] });
     setComment(''); // Clear the comment field after rejection
     setShowCommentInput(false); // Hide the comment input field
@@ -70,6 +68,11 @@ const BondingFormReview: React.FC<BondingFormReviewProps> = ({ formId, userRole,
 
   return (
     <ScrollView style={styles.container}>
+      <Image
+        source={require('./path-to-logo/logo.png')} // Update the path to your logo file
+        style={styles.logo}
+      />
+
       <Text style={styles.label}>Student Name: {form.studentName}</Text>
 
       <Text style={styles.label}>Documents:</Text>
@@ -121,6 +124,12 @@ const BondingFormReview: React.FC<BondingFormReviewProps> = ({ formId, userRole,
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   label: {
     fontSize: 18,
