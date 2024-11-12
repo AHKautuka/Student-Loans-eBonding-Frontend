@@ -40,6 +40,7 @@ export default function PersonalDetails() {
             type: 'success',
             text1: 'Changes Saved',
             text2: 'Your personal details have been saved successfully.',
+            
         });
     };
 

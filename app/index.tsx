@@ -33,22 +33,17 @@ export default function Index() {
 =======
 import React from "react";
 import { View } from "react-native";
-// import LoanAmount from "./screen/loan-amount";
-import BankDetails from "./screen/bank-details";
-import Toast from 'react-native-toast-message';
-import PersonalDetails from "./screen/personal-details";
-
+import LoanAmount from "./screen/loan-amount";
 
 export default function Index() {
   return (
-      <View style={{ flex: 1 }}>
-       <PersonalDetails />
-        <Toast />
-
-      </View>   
-
-  
+     
+      <LoanAmount/>
   );
+<<<<<<< HEAD
 >>>>>>> 4ad04bb (personal details)
 }
 
+=======
+}
+>>>>>>> 6d8bed3 (loan amounts, persistent details and bank details)
