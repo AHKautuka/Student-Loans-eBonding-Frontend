@@ -23,7 +23,7 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="verification"
 				options={{
-					title: 'Verify Bonding Form',
+					title: 'Verify Form',
 					tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="file-circle-question" color={color} />,
 				}}
 			/>
