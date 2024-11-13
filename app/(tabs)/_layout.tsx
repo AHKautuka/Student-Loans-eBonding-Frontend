@@ -48,6 +48,13 @@ export default function TabLayout() {
 					tabBarIcon: ({ color }) => <FontAwesome6 size={28} name="circle-user" color={color} />,
 				}}
 			/>
+			<Tabs.Screen 
+				name="loan-amount"
+				options={{
+					title: 'Loan',
+					tabBarIcon: ({ color }) => <FontAwesome6 size={28} name="file" color={color} />,
+				}}
+			/>
 		</Tabs>
 	);
 }
