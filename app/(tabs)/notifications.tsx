@@ -1,16 +1,16 @@
 // src/screens/NotificationsScreen.tsx
+import { FontAwesome6 } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 
 const NotificationCard: React.FC<{ title: string; description: string; onPress: () => void }> = ({ title, description, onPress }) => (
   <TouchableOpacity style={styles.notificationCard} onPress={onPress}>
-    <Icon name="exclamation-circle" size={24} color="#333" style={styles.notificationIcon} />
+    <FontAwesome6 name="circle-exclamation" size={24} color="#333" style={styles.notificationIcon} />
     <View style={styles.notificationContent}>
       <Text style={styles.notificationTitle}>{title}</Text>
       <Text style={styles.notificationDescription}>{description}</Text>
     </View>
-    <Icon name="bell" size={24} color="#333" style={styles.notificationAlertIcon} />
+    <FontAwesome6 name="bell" size={24} color="#333" style={styles.notificationAlertIcon} />
   </TouchableOpacity>
 );
 
@@ -32,14 +32,6 @@ const NotificationsScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image source={require('../assets/images/logo.png')} style={styles.logo} />
-        <TouchableOpacity onPress={() => console.log("Menu pressed")}>
-          <Icon name="bars" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
-      
       {/* Separator Line */}
       <View style={styles.separator} />
 
@@ -75,15 +67,6 @@ const NotificationsScreen: React.FC = () => {
           />
         ))}
       </ScrollView>
-
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNavigation}>
-        {["home", "file", "bell", "user"].map((icon, index) => (
-          <TouchableOpacity key={index} onPress={() => handleNavPress(icon)}>
-            <Icon name={icon} size={24} color="#333" /> {/* Removed background color */}
-          </TouchableOpacity>
-        ))}
-      </View>
     </View>
   );
 };
