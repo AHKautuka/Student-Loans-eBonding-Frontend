@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Alert, StyleSheet, Image } from 'react-native';
-import DatePicker from 'react-native-datepicker';
+import { View, Text, Alert, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
+import DateTimePicker, { EvtTypes } from '@react-native-community/datetimepicker';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { images } from '../constants';
 
 const BondingPeriodSetter = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   const saveSettings = () => {
     if (startDate && endDate) {
@@ -14,42 +18,102 @@ const BondingPeriodSetter = () => {
     }
   };
 
+  const handleDateChange = (_event: { type: EvtTypes; nativeEvent: { timestamp: number; utcOffset: number; }; }, selectedDate: Date | undefined, type: string) => {
+    const currentDate = selectedDate || new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0]; 
+
+    if (type === 'start') {
+      setStartDate(formattedDate);
+    } else {
+      setEndDate(formattedDate);
+    }
+
+    if (type === 'start') {
+      setShowStartDatePicker(false); 
+    } else {
+      setShowEndDatePicker(false); 
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={{ width: 128, height: 128
-      
-       }}><Text>Logo placeholder</Text></View>
-      <Text style={{ fontSize: 50, marginBottom: 20 }}>Set Bonding Period</Text>
+      <Image source={images.logo} style={styles.logo} />
+      <Text style={{ fontSize:30, marginBottom: 20 }}>Set Bonding Period</Text>
       <View style={styles.box}>
         <Text>Start Date:</Text>
-        <DatePicker
-          style={styles.datePicker}
-          date={startDate}
-          mode="date"
-          placeholder="Select start date"
-          format="YYYY-MM-DD"
-          minDate="2024-11-05"
-          maxDate="2024-11-14"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          onDateChange={(date: React.SetStateAction<string>) => setStartDate(date)}
-        />
-        <Text>End Date:</Text>
-        <DatePicker
-          style={styles.datePicker}
-          date={endDate}
-          mode="date"
-          placeholder="Select end date"
-          format="YYYY-MM-DD"
-          minDate="2024-11-05"
-          maxDate="2024-11-14"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          onDateChange={(date: React.SetStateAction<string>) => setEndDate(date)}
-        />
-        <View style={styles.buttonContainer}>
-          <Button title="Set Period" onPress={saveSettings} color="orange" />
+        <View style={styles.dateSelectBox}>
+          <TouchableOpacity
+            style={styles.dateButton} 
+            onPress={() => setShowStartDatePicker(true)} 
+          >
+            <Text style={styles.dateText}>{startDate ? startDate : 'Select Start Date'}</Text>
+          </TouchableOpacity>
         </View>
+        {showStartDatePicker && (
+          <DateTimePicker
+            value={new Date()}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'} 
+            onChange={(event: { type: EvtTypes; nativeEvent: { timestamp: number; utcOffset: number; }; }, date: Date | undefined) => handleDateChange(event, date, 'start')} 
+          />
+        )}
+        
+        <Text>End Date:</Text>
+        <View style={styles.dateSelectBox}>
+          <TouchableOpacity
+            style={styles.dateButton} 
+            onPress={() => setShowEndDatePicker(true)} 
+          >
+            <Text style={styles.dateText}>{endDate ? endDate : 'Select End Date'}</Text>
+          </TouchableOpacity>
+        </View>
+        {showEndDatePicker && (
+          <DateTimePicker
+            value={new Date()}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'} 
+            onChange={(event: { type: EvtTypes; nativeEvent: { timestamp: number; utcOffset: number; }; }, date: Date | undefined) => handleDateChange(event, date, 'end')} 
+          />
+        )}
+        
+        <View style={styles.dateButton}>
+          <TouchableOpacity style={styles.setPeriodButton} onPress={saveSettings}>
+            <Text style={styles.setPeriodButtonText}>Set Period</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+  
+
+ {/* Footer container with icons */}
+ <View style={styles.footer}>
+        <Icon
+          name="home"
+          size={30}
+          color="#333"
+          onPress={() => console.log("Home pressed")}
+          style={styles.icon}
+        />
+        <Icon
+          name="notifications"
+          size={30}
+          color="#333"
+          onPress={() => console.log("Notifications pressed")}
+          style={styles.icon}
+        />
+        <Icon
+          name="person"
+          size={30}
+          color="#333"
+          onPress={() => console.log("Profile pressed")}
+          style={styles.icon}
+        />
+        <Icon
+          name="create"
+          size={30}
+          color="#333"
+          onPress={() => console.log("Form pressed")}
+          style={styles.icon}
+        />
       </View>
     </View>
   );
@@ -57,15 +121,15 @@ const BondingPeriodSetter = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
   },
   logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
+    width: 200,
+    height: 200,
+    marginBottom: 10,
   },
   box: {
     width: '50%',
@@ -75,15 +139,49 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#fff',
   },
-  datePicker: {
-    width: '70%',
-    marginTop: 10,
-  
-    
+  dateSelectBox: {
+    backgroundColor: '#f0f0f0', 
+    borderRadius: 5,
+    marginVertical: 10,
+    padding: 10,
   },
-  buttonContainer: {
+  dateButton: {
+    padding: 10, 
+    borderRadius: 5,
     alignItems: 'center',
+    justifyContent: 'center',
+  
+  },
+  dateText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  setPeriodButton: {
+    backgroundColor: 'orange',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
     marginTop: 20,
+  },
+  setPeriodButtonText: {
+    fontSize: 12,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    backgroundColor: '#f8f8f8',
+    borderTopWidth: 1,
+    borderColor: '#ddd',
+  },
+  icon: {
+    marginHorizontal: 10,
   },
 });
 
