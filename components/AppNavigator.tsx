@@ -1,9 +1,9 @@
 // app/navigation/AppNavigator.tsx
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import BankDetails from '../app/screen/bank-details';
-import LoanAmount from '../app/screen/loan-amount';
-import PersonalDetails from '../app/screen/personal-details';
+import BankDetails from '../app/(tabs)/profile/bank-details';
+import LoanAmount from '../app/(tabs)/loan-amount';
+import PersonalDetails from '../app/(tabs)/profile/personal-details';
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
