@@ -27,6 +27,13 @@ export default function TabLayout() {
 					tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="file-circle-question" color={color} />,
 				}}
 			/>
+			<Tabs.Screen
+				name="bond-period/set"
+				options={{
+					title: 'Set Bonding Period',
+					tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="calendar" color={color} />,
+				}}
+			/>
 		</Tabs>
 	);
 }

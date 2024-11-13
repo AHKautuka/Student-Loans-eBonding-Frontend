@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Alert, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker, { EvtTypes } from '@react-native-community/datetimepicker';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { images } from '../constants';
+import Logo from '@/components/Logo';
 
 const BondingPeriodSetter = () => {
   const [startDate, setStartDate] = useState('');
@@ -37,7 +36,7 @@ const BondingPeriodSetter = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={images.logo} style={styles.logo} />
+      <Logo center width={128} height={128} />
       <Text style={{ fontSize:30, marginBottom: 20 }}>Set Bonding Period</Text>
       <View style={styles.box}>
         <Text>Start Date:</Text>
@@ -81,39 +80,6 @@ const BondingPeriodSetter = () => {
             <Text style={styles.setPeriodButtonText}>Set Period</Text>
           </TouchableOpacity>
         </View>
-      </View>
-  
-
- {/* Footer container with icons */}
- <View style={styles.footer}>
-        <Icon
-          name="home"
-          size={30}
-          color="#333"
-          onPress={() => console.log("Home pressed")}
-          style={styles.icon}
-        />
-        <Icon
-          name="notifications"
-          size={30}
-          color="#333"
-          onPress={() => console.log("Notifications pressed")}
-          style={styles.icon}
-        />
-        <Icon
-          name="person"
-          size={30}
-          color="#333"
-          onPress={() => console.log("Profile pressed")}
-          style={styles.icon}
-        />
-        <Icon
-          name="create"
-          size={30}
-          color="#333"
-          onPress={() => console.log("Form pressed")}
-          style={styles.icon}
-        />
       </View>
     </View>
   );
