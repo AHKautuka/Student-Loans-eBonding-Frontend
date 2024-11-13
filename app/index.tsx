@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
@@ -30,20 +29,4 @@ export default function Index() {
 			</View>
 		</ScrollView>
 	);
-=======
-import React from "react";
-import { View } from "react-native";
-import LoanAmount from "./screen/loan-amount";
-
-export default function Index() {
-  return (
-     
-      <LoanAmount/>
-  );
-<<<<<<< HEAD
->>>>>>> 4ad04bb (personal details)
 }
-
-=======
-}
->>>>>>> 6d8bed3 (loan amounts, persistent details and bank details)
