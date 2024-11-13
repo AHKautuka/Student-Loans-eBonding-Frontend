@@ -1,6 +1,5 @@
 import { Stack } from "expo-router";
 import "../global.css";
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { claim } from "@/dtos/authentication";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
@@ -32,15 +31,4 @@ export default function RootLayout() {
 			</Stack>
 		</AuthenticationContext.Provider>
 	);
-=======
-import Toast from 'react-native-toast-message';
-
-export default function RootLayout() {
-  return (
-    <>
-      <Stack/>
-      <Toast  />
-    </>
-  );
->>>>>>> 4ad04bb (personal details)
 }
