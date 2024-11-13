@@ -1,0 +1,40 @@
+import DetailsCard from "./DetailsCard";
+import AppText, { fontWeight } from "../text/AppText";
+import DetailNameText from "../text/DetailNameText";
+import { Text } from "react-native";
+import DetailValueText from "../text/DetailValueText";
+import SecondaryButton from "../buttons/SecondaryButton";
+
+interface StudentStudyDetailsCardProps {
+	
+}
+
+export default function StudentStudyDetailsCard(props : StudentStudyDetailsCardProps) {
+	return (
+		<DetailsCard style={{ gap: 6 }}>
+			<AppText style={{ paddingBottom: 12 }} fontSize={20} lineHeight={24} fontWeight={fontWeight.semibold}>Bank Details</AppText>
+			
+			<Text>
+				<DetailNameText>Name of Institution:</DetailNameText>
+				<DetailValueText></DetailValueText>
+			</Text>
+			<Text>
+				<DetailNameText>Programme of Study:</DetailNameText>
+				<DetailValueText></DetailValueText>
+			</Text>
+			<Text>
+				<DetailNameText>Registration Number:</DetailNameText>
+				<DetailValueText></DetailValueText>
+			</Text>
+			<Text>
+				<DetailNameText>Academic Year:</DetailNameText>
+				<DetailValueText></DetailValueText>
+			</Text>
+			<Text>
+				<DetailNameText>Year of Study:</DetailNameText>
+				<DetailValueText></DetailValueText>
+			</Text>
+			<SecondaryButton text="Edit" />
+		</DetailsCard>
+	);
+}
