@@ -2,6 +2,7 @@ import { Image, Text, View } from "react-native";
 import DetailsCard from "./DetailsCard";
 import DetailNameText from "../text/DetailNameText";
 import DetailValueText from "../text/DetailValueText";
+import AppText, { fontWeight } from "../text/AppText";
 
 interface AccountDetailsCardProps {
 	userEmail?: string;
@@ -11,8 +12,8 @@ interface AccountDetailsCardProps {
 
 export default function AccountDetailsCard(props : AccountDetailsCardProps) {
 	return (
-		<DetailsCard>
-			<Text className="text-xl font-semibold">Account Details</Text>
+		<DetailsCard style={{ gap: 20 }}>
+			<AppText fontSize={20} lineHeight={24} fontWeight={fontWeight.semibold}>Account Details</AppText>
 			<Image style={{ alignSelf: "center", width: 198, height: 198 }} source={require('@/assets/images/default-user-profile-picture.png')} />
 			<View style={{gap: 6}}>
 				<Text className="flex">

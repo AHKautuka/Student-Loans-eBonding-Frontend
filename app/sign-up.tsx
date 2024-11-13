@@ -5,7 +5,7 @@ import HeadingText from "@/components/text/HeadingText";
 import TextField from "@/components/TextField";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { authenticationResponse, userCredentials } from "@/dtos/authentication";
-import { urlAccounts } from "@/utils/endpoints";
+import { urlAccounts, urlStudents, urlUsers } from "@/utils/endpoints";
 import { getClaims, saveToken } from "@/utils/handleJWT";
 import { emailPattern, fieldRequired, maxEmailLength, maxPasswordLength, minPasswordLength } from "@/utils/validation";
 import axios from "axios";
@@ -41,6 +41,8 @@ export default function SignUp() {
 			const response = await axios.post<authenticationResponse>(`${urlAccounts}/register`, credentials);
 			await saveToken(response.data);
 			update(await getClaims());
+			await axios.post(`${urlUsers}`);
+			await axios.post(`${urlStudents}`);
 			router.replace("/home");
 			router.dismissAll();
 		} catch (error: any) {
