@@ -4,6 +4,7 @@ import DetailNameText from "../text/DetailNameText";
 import { Text } from "react-native";
 import DetailValueText from "../text/DetailValueText";
 import SecondaryButton from "../buttons/SecondaryButton";
+import { router } from "expo-router";
 
 interface PersonalDetailsCardProps {
 	
@@ -50,7 +51,7 @@ export default function PersonalDetailsCard(props : PersonalDetailsCardProps) {
 				<DetailNameText>National ID Number:</DetailNameText>
 				<DetailValueText></DetailValueText>
 			</Text>
-			<SecondaryButton text="Edit" />
+			<SecondaryButton onPress={() => router.navigate("/profile/personal-details")} text="Edit" />
 		</DetailsCard>
 	);
 }
