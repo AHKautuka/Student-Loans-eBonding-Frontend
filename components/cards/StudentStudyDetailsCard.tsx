@@ -12,7 +12,7 @@ interface StudentStudyDetailsCardProps {
 export default function StudentStudyDetailsCard(props : StudentStudyDetailsCardProps) {
 	return (
 		<DetailsCard style={{ gap: 6 }}>
-			<AppText style={{ paddingBottom: 12 }} fontSize={20} lineHeight={24} fontWeight={fontWeight.semibold}>Bank Details</AppText>
+			<AppText style={{ paddingBottom: 12 }} fontSize={20} lineHeight={24} fontWeight={fontWeight.semibold}>Student Study Details</AppText>
 			
 			<Text>
 				<DetailNameText>Name of Institution:</DetailNameText>
