@@ -30,8 +30,15 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="bond-period/set"
 				options={{
-					title: 'Set Bonding Period',
+					title: 'Set Period',
 					tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="calendar" color={color} />,
+				}}
+			/>
+			<Tabs.Screen
+				name="notifications"
+				options={{
+					title: 'Notifications',
+					tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="bell" color={color} />,
 				}}
 			/>
 		</Tabs>
