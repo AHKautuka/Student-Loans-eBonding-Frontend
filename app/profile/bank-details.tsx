@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import InputField from '../../../components/input-field';
+import InputField from '../../components/input-field';
 import Toast from 'react-native-toast-message';
 
 export default function BankDetails() {
