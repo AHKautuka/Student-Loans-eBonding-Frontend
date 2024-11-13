@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Image, Text, View } from 'react-native';
-import InputField from '../components/input-field';
-import Button from '../components/button';
+import InputField from '../../components/input-field';
+import Button from '../../components/button';
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
