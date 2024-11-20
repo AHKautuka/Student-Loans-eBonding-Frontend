@@ -1,131 +1,113 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Button, Alert, StyleSheet, Image } from 'react-native';
 
-interface Props {
-    studentDetails: { [key: string]: string };
-    documents: string[];
-    loanAmount: string;
-    onSubmit: (formData: { studentDetails: { [key: string]: string }; documents: string[]; loanAmount: string }) => void;
-    onEdit: () => void;
-    onCancel: () => void;
+interface BondingFormProps {
+  formId: string;
 }
 
-const ReviewBondingForm: React.FC<Props> = ({
-    studentDetails,
-    documents,
-    loanAmount,
-    onSubmit,
-    onEdit,
-    onCancel,
-}) => {
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [missingDetails, setMissingDetails] = useState<string[]>([]);
-    const [missingDocuments, setMissingDocuments] = useState<string[]>([]);
+const BondingForm: React.FC<BondingFormProps> = ({ formId }) => {
+  const [form, setForm] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-    useEffect(() => {
-        if (studentDetails && documents) {
-            validateForm();
-        }
-    }, [studentDetails, documents, loanAmount]);
-
-    const validateForm = () => {
-        const requiredDetails = ['name', 'email', 'phone'];
-        const requiredDocuments = ['ID', 'proofOfResidence'];
-
-        const missingDetailsArray: string[] = [];
-        const missingDocumentsArray: string[] = [];
-
-        requiredDetails.forEach((detail) => {
-            if (!studentDetails[detail]) {
-                missingDetailsArray.push(detail);
-            }
-        });
-
-        requiredDocuments.forEach((document) => {
-            if (!documents.includes(document)) {
-                missingDocumentsArray.push(document);
-            }
-        });
-
-        setMissingDetails(missingDetailsArray);
-        setMissingDocuments(missingDocumentsArray);
-        setIsFormValid(missingDetailsArray.length === 0 && missingDocumentsArray.length === 0);
+  useEffect(() => {
+    // Mock function to fetch form data
+    const fetchBondingForm = async (id: string) => {
+      return {
+        studentName: "Jonah Msuku",
+        documents: [], // Removed OtherDocument.pdf
+        mandatoryFields: {
+          studentName: "Jonah Msuku",
+          totalLoanAmount: "10000"
+        },
+        missingDocuments: ["ID Scan"],
+      };
     };
 
-    const handleEdit = () => {
-        onEdit();
+    const loadForm = async () => {
+      const fetchedForm = await fetchBondingForm(formId);
+      setForm(fetchedForm);
+      setLoading(false);
     };
 
-    const handleSubmit = () => {
-        // Simulate form submission
-        onSubmit({ studentDetails, documents, loanAmount });
+    loadForm();
+  }, [formId]);
 
-        // Show confirmation alert to the student
-        Alert.alert(
-            'Submission Successful',
-            'Your bonding form has been successfully submitted and saved for future reference.',
-            [{ text: 'OK' }]
-        );
-    };
+  const handleEdit = () => {
+    // Code to handle editing the form
+  };
 
-    const handleCancel = () => {
-        onCancel();
-    };
+  const handleUpload = () => {
+    // Code to handle uploading missing documents
+  };
 
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text>Review Bonding Form</Text>
+  const handleSubmit = () => {
+    // Code to handle submission of the form
+    Alert.alert('Confirmation', 'Form Submitted Successfully');
+    setIsSubmitted(true);
+  };
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      {!isSubmitted ? (
+        <View>
+          <Image
+            source={{ uri: 'https://example.com/logo.png' }} // Replace with your logo URL
+            style={styles.logo}
+          />
+          <Text>Review Bonding Form</Text>
+          <Text>Name: {form.mandatoryFields.studentName}</Text>
+          <Text>Total Approved Loan Amount: {form.mandatoryFields.totalLoanAmount}</Text>
+          <Text>Documents:</Text>
+          {form.documents.map((doc: any, index: number) => (
+            <Text key={index}>{doc.name}</Text>
+          ))}
+          {form.missingDocuments.length > 0 && (
             <View>
-                <Text>Student Details</Text>
-
-                {studentDetails && Object.keys(studentDetails).map((key) => (
-                    <Text key={key}>{`${key}: ${studentDetails[key]}`}</Text>
-                ))}
+              <Text>Missing Documents:</Text>
+              {form.missingDocuments.map((doc: any, index: number) => (
+                <Text key={index}>{doc}</Text>
+              ))}
+              <Button title="Upload Missing Documents" onPress={handleUpload} color="orange" />
             </View>
-            <View>
-                <Text>Documents</Text>
-                {documents && documents.map((document) => (
-                    <Text key={document}>{document}</Text>
-                ))}
-            </View>
-            <View>
-                <Text>Total Approved Loan Amount: {loanAmount}</Text>
-            </View>
-            
-            {/* Display missing details or documents if any */}
-            {missingDetails.length > 0 || missingDocuments.length > 0 ? (
-                <View>
-                    <Text>Please Complete the following:</Text>
-                    {missingDetails.map((detail) => (
-                        <Text key={detail}>{`- ${detail}`}</Text>
-                    ))}
-                    {missingDocuments.map((document) => (
-                        <Text key={document}>{`- ${document}`}</Text>
-                    ))}
-                </View>
-            ) : null}
-
-            {/* Bottom Buttons */}
-            <View style={styles.buttonContainer}>
-                <Button title="Cancel" onPress={handleCancel} />
-                <Button title="Edit" onPress={handleEdit} />
-                <Button title="Submit" onPress={handleSubmit} disabled={!isFormValid} />
-            </View>
-        </ScrollView>
-    );
+          )}
+          <View style={styles.buttonContainer}>
+            <Button title="Edit Details" onPress={handleEdit} color="orange" />
+            <Button title="Submit" onPress={handleSubmit} color="orange" />
+            <Button title="Cancel" onPress={() => Alert.alert('Cancelled')} color="orange" />
+          </View>
+        </View>
+      ) : (
+        <View>
+          <Text>Submit Bonding Form</Text>
+          <Button title="Submit" onPress={handleSubmit} color="orange" />
+        </View>
+      )}
+    </ScrollView>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        justifyContent: 'space-between',
-        padding: 16,
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20,
-    },
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
 });
 
-export default ReviewBondingForm;
+export default BondingForm;
