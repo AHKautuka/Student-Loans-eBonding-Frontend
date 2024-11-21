@@ -54,6 +54,8 @@ export default function TabLayout() {
 					title: 'Loan',
 					tabBarIcon: ({ color }) => <FontAwesome6 size={28} name="file" color={color} />,
 				}}
+
+			
 			/>
 		</Tabs>
 	);

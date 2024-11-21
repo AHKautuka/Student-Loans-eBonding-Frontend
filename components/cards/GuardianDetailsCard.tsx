@@ -4,6 +4,7 @@ import DetailNameText from "../text/DetailNameText";
 import { Text } from "react-native";
 import DetailValueText from "../text/DetailValueText";
 import SecondaryButton from "../buttons/SecondaryButton";
+import { router } from "expo-router";
 
 interface GuardianDetailsCardProps {
 	
@@ -46,7 +47,7 @@ export default function GuardianDetailsCard(props : GuardianDetailsCardProps) {
 				<DetailNameText>Occupation:</DetailNameText>
 				<DetailValueText></DetailValueText>
 			</Text>
-			<SecondaryButton text="Edit" />
+			<SecondaryButton onPress={() => router.navigate("/profile/guardian-details")} text="Edit" />
 		</DetailsCard>
 	);
 }

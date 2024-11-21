@@ -4,6 +4,7 @@ import DetailNameText from "../text/DetailNameText";
 import { Text } from "react-native";
 import DetailValueText from "../text/DetailValueText";
 import SecondaryButton from "../buttons/SecondaryButton";
+import { router } from "expo-router";
 
 interface StudentStudyDetailsCardProps {
 	
@@ -34,7 +35,7 @@ export default function StudentStudyDetailsCard(props : StudentStudyDetailsCardP
 				<DetailNameText>Year of Study:</DetailNameText>
 				<DetailValueText></DetailValueText>
 			</Text>
-			<SecondaryButton text="Edit" />
+		<SecondaryButton onPress={() => router.navigate({pathname: '/(tabs)profilestudent-study-details'})} text="Edit" />
 		</DetailsCard>
 	);
 }
