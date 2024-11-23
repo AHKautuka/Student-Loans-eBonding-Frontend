@@ -40,7 +40,6 @@ export default function SignIn() {
 			await saveToken(response.data);
 			update(await getClaims());
 			router.replace("/home");
-			router.dismissAll();
 		} catch (error: any) {
 			setError("root", { message: error.message });
 		}
@@ -52,10 +51,10 @@ export default function SignIn() {
 	
 	return (
 		<ScrollView className="bg-[#F6F6F6]">
-			<View className="flex flex-col h-screen items-center">
+			<View className="flex flex-col min-h-screen items-center">
 				<Logo center width={128} height={128} margin={64} />
 				
-				<View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }} className="flex-auto w-full min-h-fit p-8 bg-white border-t border-x border-[#959595]">
+				<View style={{ flex: 1, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} className="w-full min-h-fit p-8 bg-white border-t border-x border-[#959595]">
 					<HeadingText>Sign In to Account</HeadingText>
 					
 					<View className="flex flex-col gap-4">
@@ -100,6 +99,8 @@ export default function SignIn() {
 					{
 						errors.root?.message ? <Text className="text-base font-semibold text-red-600">{errors.root?.message}</Text> : <View className="h-[1.5rem]" />
 					}
+					
+					<View className="flex-grow" />
 					
 					<View className="flex flex-col mt-8 mb-12 gap-8 items-center self-center">
 						<PrimaryButton text="Sign In" onPress={handleSubmit(onSubmit)} />
