@@ -5,6 +5,9 @@ import { claim } from "@/dtos/authentication";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { getClaims } from "@/utils/handleJWT";
 import Logo from "@/components/Logo";
+import configureInterceptor from "@/dtos/httpInterceptors";
+
+configureInterceptor();
 
 export default function RootLayout() {
 	const [claims, setClaims] = useState<claim[]>([]);
