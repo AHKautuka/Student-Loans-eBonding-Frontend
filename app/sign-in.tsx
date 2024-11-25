@@ -9,8 +9,8 @@ import { urlAccounts } from "@/utils/endpoints";
 import { getClaims, saveToken } from "@/utils/handleJWT";
 import { emailPattern, fieldRequired, maxEmailLength, maxPasswordLength, minPasswordLength } from "@/utils/validation";
 import axios from "axios";
-import { router, useNavigation } from "expo-router";
-import { useContext, useEffect } from "react";
+import { router } from "expo-router";
+import { useContext } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
 
@@ -37,11 +37,17 @@ export default function SignIn() {
 	async function logIntoAccount(credentials: userCredentials) {
 		try {
 			const response = await axios.post<authenticationResponse>(`${urlAccounts}/login`, credentials);
+			
 			await saveToken(response.data);
 			update(await getClaims());
+			
 			router.replace("/home");
 		} catch (error: any) {
-			setError("root", { message: error.message });
+			if (error?.response) {
+				setError("root", { message: error.response.data.join("\n") });
+			} else {
+				setError("root", { message: error.message });
+			}
 		}
 	}
 	
