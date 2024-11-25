@@ -3,21 +3,18 @@ import DetailsCard from "./DetailsCard";
 import DetailNameText from "../text/DetailNameText";
 import DetailValueText from "../text/DetailValueText";
 import AppText, { fontWeight } from "../text/AppText";
-import { useEffect, useState } from "react";
-import { FontAwesome6 } from "@expo/vector-icons";
-import { imageType } from "../imageModal/imageType";
+import { PropsWithChildren, useEffect, useState } from "react";
 
-interface AccountDetailsCardProps {
+interface BaseAccountDetailsCardProps extends PropsWithChildren {
 	userEmail?: string;
 	role?: string;
 	profilePictureURL?: string;
 	className?: string;
-	onImageUploadButtonPress: (modalTitle: string, imgType: imageType) => void;
 }
 
 const defaultImage: ImageSourcePropType = require('@/assets/images/default-user-profile-picture.png');
 
-export default function AccountDetailsCard(props : AccountDetailsCardProps) {
+export default function BaseAccountDetailsCard(props : BaseAccountDetailsCardProps) {
 	const [image, setImage] = useState<ImageSourcePropType>(defaultImage);
 	
 	useEffect(() => {
@@ -39,9 +36,7 @@ export default function AccountDetailsCard(props : AccountDetailsCardProps) {
 					<Image style={{ alignSelf: "center", width: 198, height: 198, borderRadius: 9999, borderWidth: 2, borderColor: "#D7D7D7" }} source={image} />
 				</TouchableOpacity>
 				
-				<TouchableOpacity onPress={() => props.onImageUploadButtonPress("Profile Picuture", imageType.profilePicture)} style={{ borderWidth: 2, borderColor: "#D7D7D7", backgroundColor: "#EFEFEF", borderRadius: 9999, padding: 8, position: "absolute", right: 8, bottom: 8 }}>
-					<FontAwesome6 size={24} name="camera" color={"#eebf49"}/>
-				</TouchableOpacity>
+				{props.children}
 			</View>
 			
 			<View style={{gap: 6}}>

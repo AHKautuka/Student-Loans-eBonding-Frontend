@@ -130,7 +130,7 @@ export default function Profile() {
 		<ScrollView style={{ flexDirection: "column", padding: 32, backgroundColor: "#F6F6F6" }}>
 			<HeadingText>Profile</HeadingText>
 			
-			<AccountDetailsCard userEmail={getUserEmail()} profilePictureURL={profilePictureURL}  onImageUploadButtonPress={onImageUploadButtonPress}/>
+			<EditableAccountDetailsCard userEmail={getUserEmail()} profilePictureURL={profilePictureURL}  onImageUploadButtonPress={onImageUploadButtonPress}/>
 			<PersonalDetailsCard />
 			<BankDetailsCard />
 			<GuardianDetailsCard />
