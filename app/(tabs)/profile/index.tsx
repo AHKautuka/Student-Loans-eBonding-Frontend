@@ -1,4 +1,4 @@
-import AccountDetailsCard from "@/components/cards/AccountDetailsCard";
+import EditableAccountDetailsCard from "@/components/cards/EditableAccountDetailsCard";
 import BankDetailsCard from "@/components/cards/BankDetailsCard";
 import GuardianDetailsCard from "@/components/cards/GuardianDetailsCard";
 import PersonalDetailsCard from "@/components/cards/PersonalDetailsCard";
@@ -8,12 +8,13 @@ import HeadingText from "@/components/text/HeadingText";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { studentReadDTO } from "@/dtos/students";
 import { userReadDTO } from "@/dtos/users";
-import { urlStudents, urlUsers } from "@/utils/endpoints";
+import { urlAccounts } from "@/utils/endpoints";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import ImageModal from "@/components/imageModal/ImageModal";
 import { imageType } from "@/components/imageModal/imageType";
+import { getAccountId } from "@/utils/handleJWT";
 
 export default function Profile() {
 	const { claims } = useContext(AuthenticationContext);
@@ -71,14 +72,14 @@ export default function Profile() {
 		}
 	}
 	
-	function getEndpointURL() {
+	function getEndpointURL(baseURL: string) {
 		switch (imgType) {
 			case imageType.profilePicture:
 			case imageType.signature:
-				return urlUsers;
+				return `${baseURL}/users`;
 			case imageType.nationalId:
 			case imageType.studentId:
-				return urlStudents;
+				return `${baseURL}/students`;
 			default:
 				console.error("Invalid image type");
 				throw Error;
@@ -92,13 +93,19 @@ export default function Profile() {
 	}
 	
 	useEffect(() => {
+		if (claims.length > 0) {
+			onMount();
+		}
+	}, [claims]);
+	
+	async function onMount() {
 		fecthUserDetails();
 		fecthStudentDetails();
-	}, []);
+	}
 	
 	async function fecthUserDetails() {
 		try {
-			const response = await axios.get<userReadDTO>(`${urlUsers}/self`);
+			const response = await axios.get<userReadDTO>(`${urlAccounts}/${await getAccountId()}/users`);
 			setSignatureURL(response.data.signature);
 		} catch (error: any) {
 			console.log(error.message);
@@ -107,7 +114,7 @@ export default function Profile() {
 	
 	async function fecthStudentDetails() {
 		try {
-			const response = await axios.get<studentReadDTO>(`${urlStudents}/self`);
+			const response = await axios.get<studentReadDTO>(`${urlAccounts}/${await getAccountId()}/students`);
 			setNationalIdURL(response.data.nationalIdScan);
 			setStudentIdURL(response.data.studentIdScan);
 		} catch (error: any) {
@@ -119,7 +126,7 @@ export default function Profile() {
 		try {
 			const formData = new FormData();
 			formData.append(getImageName()!, imageURI);
-			await axios.postForm(getEndpointURL(), formData);
+			await axios.postForm(getEndpointURL(`${urlAccounts}/${await getAccountId()}`), formData);
 			console.log("Sent to backend");
 		} catch (error: any) {
 			console.log(error.message);
