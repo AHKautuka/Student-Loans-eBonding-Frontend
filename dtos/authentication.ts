@@ -15,7 +15,9 @@ export interface authenticationResponse {
 };
 
 export enum role {
+	User = "User",
 	Student = "Student",
-	LoansOfficial = "LoansBoardOfficial",
-	SchoolAdmin = "InstitutionAdministrator",
+	LoansBoardOfficial = "LoansBoardOfficial",
+	InstitutionAdmin = "InstitutionAdmin",
+	SystemAdmin = "SystemAdmin"
 };
