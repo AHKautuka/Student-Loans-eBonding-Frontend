@@ -15,6 +15,7 @@ import { ScrollView } from "react-native";
 import ImageModal from "@/components/imageModal/ImageModal";
 import { imageType } from "@/components/imageModal/imageType";
 import { getAccountId } from "@/utils/handleJWT";
+import { getUserRoles } from "@/utils/authorized";
 
 export default function Profile() {
 	const { claims } = useContext(AuthenticationContext);
@@ -137,7 +138,7 @@ export default function Profile() {
 		<ScrollView style={{ flexDirection: "column", padding: 32, backgroundColor: "#F6F6F6" }}>
 			<HeadingText>Profile</HeadingText>
 			
-			<EditableAccountDetailsCard userEmail={getUserEmail()} profilePictureURL={profilePictureURL}  onImageUploadButtonPress={onImageUploadButtonPress}/>
+			<EditableAccountDetailsCard userEmail={getUserEmail()} roles={getUserRoles(claims)} profilePictureURL={profilePictureURL}  onImageUploadButtonPress={onImageUploadButtonPress}/>
 			<PersonalDetailsCard />
 			<BankDetailsCard />
 			<GuardianDetailsCard />
