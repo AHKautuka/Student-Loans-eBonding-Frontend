@@ -1,10 +1,12 @@
 import { authenticationResponse, claim } from "@/dtos/authentication";
-import { getItem, removeItem, setItem } from "./asyncStorage";
+import { clear, getItem, removeItem, setItem } from "./asyncStorage";
 
+const accountId = 'account-id';
 const tokenKey = 'token';
 const expirationKey = "token-expiration";
 
 export async function saveToken(authData: authenticationResponse) {
+	await setItem(accountId, authData.accountId);
 	await setItem(tokenKey, authData.token);
 	await setItem(expirationKey, authData.expiration.toString());
 }
@@ -34,10 +36,13 @@ export async function getClaims(): Promise<claim[]> {
 }
 
 export async function logOut() {
-	await removeItem(tokenKey);
-	await removeItem(expirationKey);
+	await clear();
 }
 
 export async function getToken() {
 	return await getItem(tokenKey);
+}
+
+export async function getAccountId() {
+	return await getItem(accountId);
 }

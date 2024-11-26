@@ -9,6 +9,7 @@ export interface userCredentials {
 };
 
 export interface authenticationResponse {
+	accountId: string;
 	token: string;
 	expiration: Date;
 };

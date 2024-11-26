@@ -3,8 +3,8 @@ import axios from "axios";
 
 export default function configureInterceptor() {
 	axios.interceptors.request.use(
-		function (config) {
-			const token = getToken();
+		async function (config) {
+			const token = await getToken();
 			
 			if (token) {
 				config.headers.Authorization = `bearer ${token}`;
