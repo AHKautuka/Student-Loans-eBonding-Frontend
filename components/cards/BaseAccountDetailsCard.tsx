@@ -7,7 +7,7 @@ import { PropsWithChildren, useEffect, useState } from "react";
 
 interface BaseAccountDetailsCardProps extends PropsWithChildren {
 	userEmail?: string;
-	role?: string;
+	roles?: string[];
 	profilePictureURL?: string;
 	className?: string;
 }
@@ -45,8 +45,8 @@ export default function BaseAccountDetailsCard(props : BaseAccountDetailsCardPro
 					<DetailValueText>{props.userEmail}</DetailValueText>
 				</Text>
 				<Text className="flex">
-					<DetailNameText>Role:</DetailNameText>
-					<DetailValueText>{props.role}</DetailValueText>
+					<DetailNameText>Roles:</DetailNameText>
+					<DetailValueText>{props.roles?.join(", ")}</DetailValueText>
 				</Text>
 			</View>
 		</DetailsCard>
