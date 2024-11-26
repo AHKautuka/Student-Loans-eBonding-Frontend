@@ -1,23 +1,26 @@
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { role } from "@/dtos/authentication";
+import { isAuthorized } from "@/utils/authorized";
 import { ReactElement, useContext, useEffect, useState } from "react";
 
 interface authorizedProps {
 	authorized: ReactElement;
 	notAuthorized?: ReactElement;
+	authorizedRoles?: role[];
 }
 
 export default function Authorized(props: authorizedProps) {
-	const [isAuthorized, setIsAuthorized] = useState(false);
 	const { claims } = useContext(AuthenticationContext);
 	
+	const [authorized, setAuthorized] = useState(false);
+	
 	useEffect(() => {
-		setIsAuthorized(claims.length > 0);
+		setAuthorized(isAuthorized(claims, props.authorizedRoles ?? []));
 	}, [claims]);
 	
 	return (
 		<>
-			{isAuthorized ? props.authorized : props.notAuthorized}
+			{authorized ? props.authorized : props.notAuthorized}
 		</>
 	);
 }
