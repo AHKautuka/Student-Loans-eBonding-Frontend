@@ -11,7 +11,7 @@ export function isAuthorized(claims: claim[], authorizedRoles: role[]) {
 		return true; // Authenticated and No Roles required
 	}
 	
-	const userRoles = claims.filter(x => x.name === "roles")?.at(0)?.value?.split(whitespaceOrCommaRegExp);
+	const userRoles = getUserRoles(claims);
 	
 	if (!userRoles) {
 		return false; // Authenticated but Not Authorized
@@ -25,4 +25,8 @@ export function isAuthorized(claims: claim[], authorizedRoles: role[]) {
 	};
 	
 	return false; // Authenticated but Not Authorized
+}
+
+export function getUserRoles(claims: claim[]) {
+	return claims.filter(x => x.name === "roles")?.at(0)?.value?.split(whitespaceOrCommaRegExp);
 }
