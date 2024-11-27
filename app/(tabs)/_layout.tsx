@@ -1,13 +1,41 @@
 import Logo from "@/components/Logo";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
-import { role } from "@/dtos/authentication";
-import { isAuthorized } from "@/utils/authorized";
+import { claim, role } from "@/dtos/authentication";
+import { getUserRoles, isAuthorized } from "@/utils/authorized";
+import { urlAccounts } from "@/utils/endpoints";
+import { getAccountId } from "@/utils/handleJWT";
 import { FontAwesome6 } from "@expo/vector-icons";
+import axios from "axios";
 import { Tabs } from "expo-router";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export default function TabLayout() {
 	const { claims } = useContext(AuthenticationContext);
+	
+	useEffect(() => {
+		onMount(claims);
+	}, [claims]);
+	
+	async function onMount(claims: claim[]) {
+		try {
+			const userRoles = getUserRoles(claims);
+			
+			if (userRoles?.includes(role.User)) {
+				await axios.put(`${urlAccounts}/${await getAccountId()}/users`);
+			}
+			if (userRoles?.includes(role.Student)) {
+				await axios.put(`${urlAccounts}/${await getAccountId()}/students`);
+			}
+		} catch (error: any) {
+			if (error?.response) {
+				console.log(error.response.data.join("\n"));
+			} else if (error?.request) {
+				console.log(error.request);
+			} else {
+				console.log(error.message);
+			}
+		}
+	}
 	
 	return (
 		<Tabs screenOptions={{

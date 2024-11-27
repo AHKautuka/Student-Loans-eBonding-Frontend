@@ -16,6 +16,9 @@ import ImageModal from "@/components/imageModal/ImageModal";
 import { imageType } from "@/components/imageModal/imageType";
 import { getAccountId } from "@/utils/handleJWT";
 import { getUserRoles } from "@/utils/authorized";
+import Authorized from "@/components/Authorized";
+import BaseDocumentsCard from "@/components/cards/BaseDocumentsCard";
+import { claim, role } from "@/dtos/authentication";
 
 export default function Profile() {
 	const { claims } = useContext(AuthenticationContext);
@@ -95,13 +98,19 @@ export default function Profile() {
 	
 	useEffect(() => {
 		if (claims.length > 0) {
-			onMount();
+			onMount(claims);
 		}
 	}, [claims]);
 	
-	async function onMount() {
-		fecthUserDetails();
-		fecthStudentDetails();
+	async function onMount(claims: claim[]) {
+		const userRoles = getUserRoles(claims);
+		
+		if (userRoles?.includes(role.User)) {
+			fecthUserDetails();
+		}
+		if (userRoles?.includes(role.Student)) {
+			fecthStudentDetails();
+		}
 	}
 	
 	async function fecthUserDetails() {
@@ -126,12 +135,33 @@ export default function Profile() {
 	async function sendToBackend(imageURI: string) {
 		try {
 			const formData = new FormData();
-			formData.append(getImageName()!, imageURI);
-			await axios.postForm(getEndpointURL(`${urlAccounts}/${await getAccountId()}`), formData);
-			console.log("Sent to backend");
+			formData.append(getImageName(), dataURItoBlob(imageURI));
+			const url = getEndpointURL(`${urlAccounts}/${await getAccountId()}`);
+			await axios.putForm(url, formData);
+			console.log(`Sent ${JSON.stringify(formData)} to backend at endpoint ${url}`);
 		} catch (error: any) {
 			console.log(error.message);
 		}
+	}
+	
+	function dataURItoBlob(dataURI: string) {
+		// convert base64/URLEncoded data component to raw binary data held in a string
+		var byteString;
+		if (dataURI.split(',')[0].indexOf('base64') >= 0)
+			byteString = atob(dataURI.split(',')[1]);
+		else
+			byteString = unescape(dataURI.split(',')[1]);
+	
+		// separate out the mime component
+		var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+	
+		// write the bytes of the string to a typed array
+		var ia = new Uint8Array(byteString.length);
+		for (var i = 0; i < byteString.length; i++) {
+			ia[i] = byteString.charCodeAt(i);
+		}
+	
+		return new Blob([ia], {type:mimeString});
 	}
 
 	return (
@@ -140,10 +170,22 @@ export default function Profile() {
 			
 			<EditableAccountDetailsCard userEmail={getUserEmail()} roles={getUserRoles(claims)} profilePictureURL={profilePictureURL}  onImageUploadButtonPress={onImageUploadButtonPress}/>
 			<PersonalDetailsCard />
-			<BankDetailsCard />
-			<GuardianDetailsCard />
-			<StudentStudyDetailsCard />
-			<StudentDocumentsCard nationalIdURL={nationalIdURL} studentIdURL={studentIdURL} signatureURL={signatureURL} onImageUploadButtonPress={onImageUploadButtonPress}/>
+			<Authorized authorized={(
+				<>
+					<BankDetailsCard />
+					<GuardianDetailsCard />
+					<StudentStudyDetailsCard />
+				</>
+			)} authorizedRoles={[role.Student]} />
+			<Authorized
+				authorized={(
+					<StudentDocumentsCard nationalIdURL={nationalIdURL} studentIdURL={studentIdURL} signatureURL={signatureURL} onImageUploadButtonPress={onImageUploadButtonPress}/>
+				)}
+				notAuthorized={(
+					<BaseDocumentsCard signatureURL={signatureURL} onImageUploadButtonPress={onImageUploadButtonPress}/>
+				)}
+				authorizedRoles={[role.Student]} />
+			
 			
 			<ImageModal title={modalTitle} modalVisible={modalVisible} setModalVisible={setModalVisible} setImageURI={(uri) => setImageURL(uri)} sendToBackEnd={sendToBackend} />
 		</ScrollView>

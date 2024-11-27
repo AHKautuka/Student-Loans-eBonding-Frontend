@@ -4,8 +4,9 @@ import DetailNameText from "../text/DetailNameText";
 import DetailsCard from "./DetailsCard";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { imageType } from "../imageModal/imageType";
+import BaseDocumentsCard from "./BaseDocumentsCard";
 
-interface StudentDocumentsCardProps{
+interface StudentDocumentsCardProps {
 	nationalIdURL?: string;
 	studentIdURL?: string;
 	signatureURL?: string;
@@ -14,15 +15,11 @@ interface StudentDocumentsCardProps{
 
 const defaultNationalId: ImageSourcePropType = require('@/assets/images/placeholder-national-id-scan.jpg');
 const defaultStudentId: ImageSourcePropType = require('@/assets/images/placeholder-student-id-scan.jpg');
-const defaultSignature: ImageSourcePropType = require('@/assets/images/placeholder-signature-scan.jpg');
 
 export default function StudentDocumentsCard(props: StudentDocumentsCardProps) {
 	return (
-		<DetailsCard style={{ gap: 12 }}>
-			<AppText fontSize={20} lineHeight={24} fontWeight={fontWeight.semibold}>Documents</AppText>
-			
-			<View style={{ gap: 32, paddingBottom: 12 }}>
-				<View style={{ gap: 16 }}>
+		<BaseDocumentsCard signatureURL={props.signatureURL} onImageUploadButtonPress={props.onImageUploadButtonPress}>
+			<View style={{ gap: 16 }}>
 					<DetailNameText>National ID Scan:</DetailNameText>
 					<View style={{ alignSelf: "center", width: 284, height: 284 }}>
 						<Image source={props.nationalIdURL ? { uri: props.nationalIdURL } : defaultNationalId} style={{ alignSelf: "center", width: 284, height: 284, borderRadius: 10, borderWidth: 2, borderColor: "#D7D7D7" }}/>
@@ -41,17 +38,6 @@ export default function StudentDocumentsCard(props: StudentDocumentsCardProps) {
 						</TouchableOpacity>
 					</View>
 				</View>
-				
-				<View style={{ gap: 16 }}>
-					<DetailNameText>Signature Scan:</DetailNameText>
-					<View style={{ alignSelf: "center", width: 284, height: 284 }}>
-						<Image source={props.signatureURL ? { uri: props.signatureURL } : defaultSignature} style={{ alignSelf: "center", width: 284, height: 284, borderRadius: 10, borderWidth: 2, borderColor: "#D7D7D7" }}/>
-						<TouchableOpacity onPress={() => props.onImageUploadButtonPress("Signature Scan", imageType.signature)} style={{ borderWidth: 2, borderColor: "#D7D7D7", backgroundColor: "#EFEFEF", borderRadius: 10, padding: 8, position: "absolute", right: 8, bottom: 8 }}>
-							<FontAwesome6 size={24} name="camera" color={"#eebf49"}/>
-						</TouchableOpacity>
-					</View>
-				</View>
-			</View>
-		</DetailsCard>
+		</BaseDocumentsCard>
 	);
 }
