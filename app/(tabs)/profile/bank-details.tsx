@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import InputField from '../../../components/input-field';
 import Toast from 'react-native-toast-message';
+import axios from 'axios';
+import { urlAccounts } from '@/utils/endpoints';
 
-export default function BankDetails() {
+export default function BankDetails() {}
     const [BankName, setBankName] = useState('');
     const [BranchName, setBranchName] = useState('');
     const [AccountName, setAccountName] = useState('');
@@ -14,7 +16,7 @@ export default function BankDetails() {
         setBranchName('');
         setAccountName('');
         setAccountNumber('');
-       
+    
         Toast.show({
             type: 'info',
             text1: 'Changes Reset',
@@ -22,14 +24,22 @@ export default function BankDetails() {
         });
     };
 
-    const handleSave = () => {
+
+
+    const handleSave = async () => {
         // Logic to save changes goes here
-        Toast.show({
-            type: 'success',
-            text1: 'Changes Saved',
-            text2: 'Your personal details have been saved successfully.',
-        });
-    };
+        try {
+            const response = await axios.put(urlAccounts, {
+                BankName,
+                BranchName,
+                AccountName,
+                AccountNumber,
+              
+            })
+        }catch (error) {
+            throw new Error(`Unable to save changes ${error}`)
+        }
+
 
     const handleGoBack = () => {
         // Logic to navigate back goes here
