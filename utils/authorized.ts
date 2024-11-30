@@ -17,8 +17,8 @@ export function isAuthorized(claims: claim[], authorizedRoles: role[]) {
 		return false; // Authenticated but Not Authorized
 	}
 	
-	for (const authorizedRole in authorizedRoles) {
-		const userHasRole = userRoles.includes(authorizedRole);
+	for (let i = 0; i < authorizedRoles.length; i++) {
+		const userHasRole = userRoles.includes(authorizedRoles[i].toString());
 		if (userHasRole) {
 			return true; // Authenticated and Authorized
 		}
@@ -28,5 +28,5 @@ export function isAuthorized(claims: claim[], authorizedRoles: role[]) {
 }
 
 export function getUserRoles(claims: claim[]) {
-	return claims.filter(x => x.name === "roles")?.at(0)?.value?.split(whitespaceOrCommaRegExp);
+	return claims.filter(x => x.name === "roles")?.at(0)?.value?.split(',');
 }
