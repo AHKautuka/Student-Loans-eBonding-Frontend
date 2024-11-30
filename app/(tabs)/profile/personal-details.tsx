@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import InputField from '../../../components/input-field';
 import Toast from 'react-native-toast-message';
+import axios from 'axios';
+import { urlAccounts } from '@/utils/endpoints';
 
 export default function PersonalDetails() {
     const [fullName, setFullName] = useState('');
@@ -34,8 +36,24 @@ export default function PersonalDetails() {
         });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // Logic to save changes goes here
+        try {
+            const response = await axios.put(urlAccounts, {
+                fullName,
+                Sex,
+                dob,
+                Address,
+                Village,
+                TA,
+                District,
+                Number,
+                ID
+            })
+        }catch (error) {
+            throw new Error(`Unable to save changes ${error}`)
+        }
+
         Toast.show({
             type: 'success',
             text1: 'Changes Saved',

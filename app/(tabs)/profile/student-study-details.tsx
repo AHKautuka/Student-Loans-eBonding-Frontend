@@ -2,44 +2,70 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import InputField from '../../../components/input-field';
 import Toast from 'react-native-toast-message';
-import axios from 'axios';
 import { urlAccounts } from '@/utils/endpoints';
+import axios from 'axios';
 
-export default function BankDetails() {}
-    const [BankName, setBankName] = useState('');
-    const [BranchName, setBranchName] = useState('');
-    const [AccountName, setAccountName] = useState('');
-    const [AccountNumber, setAccountNumber] = useState('');
+export default function StudyDetails() {
+    const [InstitutionName, setInstitutionName] = useState('');
+    const [ProgrammeOfStudy, setProgrammeOfStudy] = useState('');
+    const [RegistrationNumber, setRegistrationNumber] = useState('');
+    const [AcademicYear, setAcademicYear] = useState('');
+    const [YearOfStudy, setYearOfStudy] = useState('');
 
     const handleReset = () => {
-        setBankName('');
-        setBranchName('');
-        setAccountName('');
-        setAccountNumber('');
-    
+        setInstitutionName('');
+        setProgrammeOfStudy('');
+        setRegistrationNumber('');
+        setAcademicYear('');
+        setYearOfStudy('')
+       
         Toast.show({
             type: 'info',
             text1: 'Changes Reset',
             text2: 'Your changes have been reset to defaults.',
         });
+
     };
-
-
 
     const handleSave = async () => {
         // Logic to save changes goes here
         try {
             const response = await axios.put(urlAccounts, {
-                BankName,
-                BranchName,
-                AccountName,
-                AccountNumber,
-              
+                InstitutionName,
+                ProgrammeOfStudy,
+                RegistrationNumber,
+                AcademicYear,
+                YearOfStudy,
+            
             })
         }catch (error) {
             throw new Error(`Unable to save changes ${error}`)
         }
 
+    const handleSave = async () => {
+        // Logic to save changes goes here
+        try {
+            const response = await axios.put(urlAccounts, { 
+                InstitutionName,
+                ProgrammeOfStudy,
+                RegistrationNumber,
+                AcademicYear,
+                YearOfStudy,
+               
+            })
+        }catch (error) {
+            throw new Error(`Unable to save changes ${error}`)
+        }
+
+
+    const handleSave = () => {
+        // Logic to save changes goes here
+        Toast.show({
+            type: 'success',
+            text1: 'Changes Saved',
+            text2: 'Your personal details have been saved successfully.',
+        });
+    };
 
     const handleGoBack = () => {
         // Logic to navigate back goes here
@@ -52,47 +78,59 @@ export default function BankDetails() {}
 
     return (
         <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ padding: 20 }}>
-            <Text className="text-4xl font-bold mb-6 text-center">Edit Your Bank Details</Text>
+            <Text className="text-4xl font-bold mb-6 text-center">Edit Your Student Study Details</Text>
 
             <View className="mb-6">
-                <Text className="text-lg font-semibold mb-2">Bank Name</Text>
+                <Text className="text-lg font-semibold mb-2">Institution Name</Text>
                 <InputField
-                    placeholder='Current Bank Name'
-                    value={BankName}
-                    onChangeText={setBankName}
+                    placeholder='Institution Name'
+                    value={InstitutionName}
+                    onChangeText={setInstitutionName}
                     inputMode='text'
                     className="h-12 border border-gray-300 rounded-lg px-3 shadow-sm"
                 />
             </View>
 
             <View className="mb-6">
-                <Text className="text-lg font-semibold mb-2">Branch Name</Text>
+                <Text className="text-lg font-semibold mb-2">Programme Of Study</Text>
                 <InputField
-                    placeholder='Current Branch Name'
-                    value={BranchName}
-                    onChangeText={setBranchName}
+                    placeholder='Programme Of Study'
+                    value={ProgrammeOfStudy}
+                    onChangeText={setProgrammeOfStudy}
                     inputMode='text'
                     className="h-12 border border-gray-300 rounded-lg px-3 shadow-sm"
                 />
             </View>
 
             <View className="mb-6">
-                <Text className="text-lg font-semibold mb-2">Account Name</Text>
+                <Text className="text-lg font-semibold mb-2">Registration Number</Text>
                 <InputField
-                    placeholder='Current Account Name'
-                    value={AccountName}
-                    onChangeText={setAccountName}
+                    placeholder='Registration Number'
+                    value={RegistrationNumber}
+                    onChangeText={setRegistrationNumber}
                     inputMode='text'
                     className="h-12 border border-gray-300 rounded-lg px-3 shadow-sm"
                 />
             </View>
 
             <View className="mb-6">
-                <Text className="text-lg font-semibold mb-2">Account Number</Text>
+                <Text className="text-lg font-semibold mb-2">Academic Year</Text>
                 <InputField
-                    placeholder='Current Account Number'
-                    value={AccountNumber}
-                    onChangeText={setAccountNumber}
+                    placeholder='Current Academic Year'
+                    value={AcademicYear}
+                    onChangeText={setAcademicYear}
+                    inputMode='text'
+                    className="h-12 border border-gray-300 rounded-lg px-3 shadow-sm"
+                />
+            </View>
+
+            
+            <View className="mb-6">
+                <Text className="text-lg font-semibold mb-2">Year Of Study</Text>
+                <InputField
+                    placeholder='Current Year Of Study'
+                    value={YearOfStudy}
+                    onChangeText={setYearOfStudy}
                     inputMode='text'
                     className="h-12 border border-gray-300 rounded-lg px-3 shadow-sm"
                 />
@@ -124,6 +162,9 @@ export default function BankDetails() {}
         </ScrollView>
     );
 }
+    }
+}
+
 function setPostalAddress(arg0: string) {
     throw new Error('Function not implemented.');
 }
