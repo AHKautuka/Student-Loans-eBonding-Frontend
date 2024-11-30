@@ -3,6 +3,7 @@ import { View, Text, Alert, StyleSheet, Image, TouchableOpacity, Platform } from
 import DateTimePicker, { EvtTypes } from '@react-native-community/datetimepicker';
 import Logo from '@/components/Logo';
 import axios from 'axios';
+import { urlBondingPeriods } from '@/utils/endpoints';
 
 const BondingPeriodSetter = () => {
   const [startDate, setStartDate] = useState('');
@@ -21,7 +22,7 @@ const BondingPeriodSetter = () => {
         };
 
         // Make the POST request to the backend
-        const response = await axios.post('http://localhost:5043/api/bonding period', bondingPeriodData);
+        const response = await axios.post(`${urlBondingPeriods}`, bondingPeriodData);
 
         // Show success message
         Alert.alert('Period set successfully', response.data.message);
