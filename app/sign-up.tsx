@@ -38,7 +38,7 @@ export default function SignUp() {
 	
 	async function registerAccount(credentials: userCredentials) {
 		try {
-			const response = await axios.post<authenticationResponse>(`${urlAccounts}/register`, credentials);
+			const response = await axios.post<authenticationResponse>(`${urlAccounts}/register/students`, credentials);
 			
 			await saveToken(response.data);
 			update(await getClaims());

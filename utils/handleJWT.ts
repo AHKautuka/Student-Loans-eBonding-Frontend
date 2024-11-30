@@ -1,5 +1,7 @@
 import { authenticationResponse, claim } from "@/dtos/authentication";
 import { clear, getItem, removeItem, setItem } from "./asyncStorage";
+import axios from "axios";
+import { urlAccounts } from "./endpoints";
 
 const accountId = 'account-id';
 const tokenKey = 'token';
@@ -27,12 +29,24 @@ export async function getClaims(): Promise<claim[]> {
 	}
 	
 	const dataToken = JSON.parse(atob(token.split('.')[1]));
-	const response: claim[] = [];
+	const claims: claim[] = [];
 	for (const property in dataToken) {
-		response.push({ name: property, value: dataToken[property]});
+		claims.push({ name: property, value: dataToken[property]});
 	}
 	
-	return response;
+	try {
+		const response = await axios.get<string[]>(`${urlAccounts}/${await getAccountId()}/roles`);
+		const roles = response.data;
+		claims.push({ name: "roles", value: roles.join(",") });
+	} catch (error: any) {
+		if (error?.response) {
+			console.log(error.response.data);
+		} else {
+			console.log(error.message)
+		}
+	}
+	
+	return claims;
 }
 
 export async function logOut() {

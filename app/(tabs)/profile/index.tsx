@@ -2,12 +2,11 @@ import EditableAccountDetailsCard from "@/components/cards/EditableAccountDetail
 import BankDetailsCard from "@/components/cards/BankDetailsCard";
 import GuardianDetailsCard from "@/components/cards/GuardianDetailsCard";
 import PersonalDetailsCard from "@/components/cards/PersonalDetailsCard";
-import StudentDocumentsCard from "@/components/cards/StudentDocumentsCard";
 import StudentStudyDetailsCard from "@/components/cards/StudentStudyDetailsCard";
 import HeadingText from "@/components/text/HeadingText";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
-import { studentReadDTO } from "@/dtos/students";
-import { userReadDTO } from "@/dtos/users";
+import { convertStudentDTOtoModel, defaultStudentModel, studentModel, studentReadDTO } from "@/dtos/students";
+import { convertUserDTOtoModel, defaultUserModel, userModel, userReadDTO } from "@/dtos/users";
 import { urlAccounts } from "@/utils/endpoints";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
@@ -15,6 +14,10 @@ import { ScrollView } from "react-native";
 import ImageModal from "@/components/imageModal/ImageModal";
 import { imageType } from "@/components/imageModal/imageType";
 import { getAccountId } from "@/utils/handleJWT";
+import { getUserRoles } from "@/utils/authorized";
+import Authorized from "@/components/Authorized";
+import { claim, role } from "@/dtos/authentication";
+import DocumentsCard from "@/components/cards/DocumentsCard";
 
 export default function Profile() {
 	const { claims } = useContext(AuthenticationContext);
@@ -27,32 +30,30 @@ export default function Profile() {
 	const [modalTitle, setModalTitle] = useState<string | undefined>(undefined);
 	const [imgType, setImgType] = useState<imageType>(imageType.none);
 	
-	const [profilePictureURL, setProfilePictureURL] = useState<string>();
-	const [nationalIdURL, setNationalIdURL] = useState<string>();
-	const [studentIdURL, setStudentIdURL] = useState<string>();
-	const [signatureURL, setSignatureURL] = useState<string>();
+	const [userModel, setUserModel] = useState<userModel>(defaultUserModel);
+	const [studentModel, setStudentModel] = useState<studentModel>(defaultStudentModel);
 
 	function setImageURL(url?: string) {
 		switch (imgType) {
 			case imageType.profilePicture:
-				setProfilePictureURL(url);
+				setUserModel({...userModel, profilePicture: url});
 				break;
 			
 			case imageType.nationalId:
-				setNationalIdURL(url);
+				setStudentModel({...studentModel, nationalIdScan: url});
 				break;
 			
 			case imageType.studentId:
-				setStudentIdURL(url);
+				setStudentModel({...studentModel, studentIdScan: url});
 				break;
 			
 			case imageType.signature:
-				setSignatureURL(url);
+				setUserModel({...userModel, signature: url});
 				break;
 					
 			default:
 				console.error("Invalid image type");
-				throw Error;
+				throw Error("Invalid image type");
 		}
 	}
 	
@@ -94,19 +95,25 @@ export default function Profile() {
 	
 	useEffect(() => {
 		if (claims.length > 0) {
-			onMount();
+			onMount(claims);
 		}
 	}, [claims]);
 	
-	async function onMount() {
-		fecthUserDetails();
-		fecthStudentDetails();
+	async function onMount(claims: claim[]) {
+		const userRoles = getUserRoles(claims);
+		
+		if (userRoles?.includes(role.User)) {
+			fecthUserDetails();
+		}
+		if (userRoles?.includes(role.Student)) {
+			fecthStudentDetails();
+		}
 	}
 	
 	async function fecthUserDetails() {
 		try {
 			const response = await axios.get<userReadDTO>(`${urlAccounts}/${await getAccountId()}/users`);
-			setSignatureURL(response.data.signature);
+			setUserModel(convertUserDTOtoModel(response.data));
 		} catch (error: any) {
 			console.log(error.message);
 		}
@@ -115,8 +122,7 @@ export default function Profile() {
 	async function fecthStudentDetails() {
 		try {
 			const response = await axios.get<studentReadDTO>(`${urlAccounts}/${await getAccountId()}/students`);
-			setNationalIdURL(response.data.nationalIdScan);
-			setStudentIdURL(response.data.studentIdScan);
+			setStudentModel(convertStudentDTOtoModel(response.data));
 		} catch (error: any) {
 			console.log(error.message);
 		}
@@ -125,24 +131,46 @@ export default function Profile() {
 	async function sendToBackend(imageURI: string) {
 		try {
 			const formData = new FormData();
-			formData.append(getImageName()!, imageURI);
-			await axios.postForm(getEndpointURL(`${urlAccounts}/${await getAccountId()}`), formData);
-			console.log("Sent to backend");
+			formData.append(getImageName(), dataURItoBlob(imageURI));
+			const url = getEndpointURL(`${urlAccounts}/${await getAccountId()}`);
+			await axios.putForm(url, formData);
+			console.log(`Sent ${JSON.stringify(formData)} to backend at endpoint ${url}`);
 		} catch (error: any) {
 			console.log(error.message);
 		}
+	}
+	
+	function dataURItoBlob(dataURI: string) {
+		// convert base64/URLEncoded data component to raw binary data held in a string
+		const byteString = dataURI.split(',')[0].indexOf('base64') >= 0 ? atob(dataURI.split(',')[1]) : unescape(dataURI.split(',')[1]);
+		
+		// separate out the mime component
+		var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+		
+		// write the bytes of the string to a typed array
+		var ia = new Uint8Array(byteString.length);
+		for (var i = 0; i < byteString.length; i++) {
+			ia[i] = byteString.charCodeAt(i);
+		}
+		
+		return new Blob([ia], {type:mimeString});
 	}
 
 	return (
 		<ScrollView style={{ flexDirection: "column", padding: 32, backgroundColor: "#F6F6F6" }}>
 			<HeadingText>Profile</HeadingText>
 			
-			<EditableAccountDetailsCard userEmail={getUserEmail()} profilePictureURL={profilePictureURL}  onImageUploadButtonPress={onImageUploadButtonPress}/>
-			<PersonalDetailsCard />
-			<BankDetailsCard />
-			<GuardianDetailsCard />
-			<StudentStudyDetailsCard />
-			<StudentDocumentsCard nationalIdURL={nationalIdURL} studentIdURL={studentIdURL} signatureURL={signatureURL} onImageUploadButtonPress={onImageUploadButtonPress}/>
+			<EditableAccountDetailsCard userEmail={getUserEmail()} roles={getUserRoles(claims)} profilePictureURL={userModel.profilePicture}  onImageUploadButtonPress={onImageUploadButtonPress} />
+			<PersonalDetailsCard userModel={userModel} studentModel={studentModel} />
+			<Authorized authorized={(
+				<>
+					<BankDetailsCard studentModel={studentModel} />
+					<GuardianDetailsCard guardianModel={studentModel.guardian} />
+					<StudentStudyDetailsCard studentModel={studentModel} />
+				</>
+			)} authorizedRoles={[role.Student]} />
+			
+			<DocumentsCard nationalIdURL={studentModel.nationalIdScan}  studentIdURL={studentModel.studentIdScan} signatureURL={userModel.signature} onImageUploadButtonPress={onImageUploadButtonPress} />
 			
 			<ImageModal title={modalTitle} modalVisible={modalVisible} setModalVisible={setModalVisible} setImageURI={(uri) => setImageURL(uri)} sendToBackEnd={sendToBackend} />
 		</ScrollView>
