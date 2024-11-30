@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Button, Alert, StyleSheet, Image } from 'react-native';
+import axios from 'axios'; // Import Axios
+import { urlForms } from '@/utils/endpoints';
 
 interface BondingFormProps {
   formId: string;
@@ -11,23 +13,25 @@ const BondingForm: React.FC<BondingFormProps> = ({ formId }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    // Mock function to fetch form data
     const fetchBondingForm = async (id: string) => {
-      return {
-        studentName: "Jonah Msuku",
-        documents: [], // Removed OtherDocument.pdf
-        mandatoryFields: {
-          studentName: "Jonah Msuku",
-          totalLoanAmount: "10000"
-        },
-        missingDocuments: ["ID Scan"],
-      };
+      try {
+        const response = await axios.get(`${urlForms}/${id}`); // Use Axios to fetch the form
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching bonding form:', error);
+        throw error;
+      }
     };
 
     const loadForm = async () => {
-      const fetchedForm = await fetchBondingForm(formId);
-      setForm(fetchedForm);
-      setLoading(false);
+      try {
+        const fetchedForm = await fetchBondingForm(formId);
+        setForm(fetchedForm);
+      } catch (error) {
+        console.error('Error loading form:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadForm();
@@ -41,10 +45,16 @@ const BondingForm: React.FC<BondingFormProps> = ({ formId }) => {
     // Code to handle uploading missing documents
   };
 
-  const handleSubmit = () => {
-    // Code to handle submission of the form
-    Alert.alert('Confirmation', 'Form Submitted Successfully');
-    setIsSubmitted(true);
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(`${urlForms}`, form); // Use Axios to submit the form
+      setForm(response.data);
+      Alert.alert('Confirmation', 'Form Submitted Successfully');
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      Alert.alert('Error', 'There was an error submitting the form');
+    }
   };
 
   if (loading) {
