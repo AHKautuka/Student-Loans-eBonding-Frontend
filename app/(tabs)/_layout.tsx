@@ -28,7 +28,7 @@ export default function TabLayout() {
 			}
 		} catch (error: any) {
 			if (error?.response) {
-				console.log(error.response.data.join("\n"));
+				console.log(error.response.data);
 			} else if (error?.request) {
 				console.log(error.request);
 			} else {
@@ -52,6 +52,14 @@ export default function TabLayout() {
 				options={{
 					title: 'Home',
 					tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="house" color={color} />,
+				}}
+			/>
+			<Tabs.Screen 
+				name="bonding-form"
+				options={{
+					title: 'Bonding Form',
+					href: isAuthorized(claims, [role.Student]) ? "/bonding-form" : null,
+					tabBarIcon: ({ color }) => <FontAwesome6 size={28} name="file" color={color} />,
 				}}
 			/>
 			<Tabs.Screen
@@ -90,13 +98,6 @@ export default function TabLayout() {
 				options={{
 					title: 'Profile',
 					tabBarIcon: ({ color }) => <FontAwesome6 size={28} name="circle-user" color={color} />,
-				}}
-			/>
-			<Tabs.Screen 
-				name="loan-amount"
-				options={{
-					title: 'Loan',
-					tabBarIcon: ({ color }) => <FontAwesome6 size={28} name="file" color={color} />,
 				}}
 			/>
 		</Tabs>
