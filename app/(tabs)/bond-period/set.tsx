@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Alert, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker, { EvtTypes } from '@react-native-community/datetimepicker';
 import Logo from '@/components/Logo';
+import axios from 'axios';
 
 const BondingPeriodSetter = () => {
   const [startDate, setStartDate] = useState('');
@@ -9,9 +10,25 @@ const BondingPeriodSetter = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
-  const saveSettings = () => {
+ // Function to make the API request to save the bonding period
+  const saveSettings = async () => {
     if (startDate && endDate) {
-      Alert.alert('Period set successfully', `Bonding period set from ${startDate} to ${endDate}`);
+      try {
+        // Prepare the data to be sent to the backend
+        const bondingPeriodData = {
+          startDate: startDate,
+          endDate: endDate,
+        };
+
+        // Make the POST request to the backend
+        const response = await axios.post('http://localhost:5043/api/bonding period', bondingPeriodData);
+
+        // Show success message
+        Alert.alert('Period set successfully', response.data.message);
+      } catch (error) {
+        console.error('Error saving bonding period:', error);
+        Alert.alert('Error', 'Failed to set bonding period. Please try again.');
+      }
     } else {
       Alert.alert('Error', 'Please select both start and end dates.');
     }
