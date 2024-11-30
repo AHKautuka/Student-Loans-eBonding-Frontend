@@ -5,7 +5,7 @@ import { claim } from "@/dtos/authentication";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { getClaims } from "@/utils/handleJWT";
 import Logo from "@/components/Logo";
-import configureInterceptor from "@/dtos/httpInterceptors";
+import configureInterceptor from "@/utils/httpInterceptors";
 
 configureInterceptor();
 
