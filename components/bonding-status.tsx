@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-
+import axios from 'axios';
 const BondingStatus = () => {
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
