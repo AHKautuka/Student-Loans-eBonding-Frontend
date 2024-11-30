@@ -1,3 +1,4 @@
+import BondingStatus from "@/components/bonding-status";
 import SecondaryButton from "@/components/buttons/SecondaryButton";
 import BaseAccountDetailsCard from "@/components/cards/BaseAccountDetailsCard";
 import HeadingText from "@/components/text/HeadingText";
@@ -20,6 +21,8 @@ export default function HomePage() {
 			<HeadingText>Home</HeadingText>
 			
 			<BaseAccountDetailsCard userEmail={getUserEmail()} roles={getUserRoles(claims)} />
+			
+			<BondingStatus />
 			
 			<SecondaryButton text="Log Out" onPress={async () => {
 				await logOut();
