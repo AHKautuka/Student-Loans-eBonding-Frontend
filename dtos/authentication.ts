@@ -9,12 +9,15 @@ export interface userCredentials {
 };
 
 export interface authenticationResponse {
+	accountId: string;
 	token: string;
 	expiration: Date;
 };
 
 export enum role {
+	User = "User",
 	Student = "Student",
-	LoansOfficial = "LoansBoardOfficial",
-	SchoolAdmin = "InstitutionAdministrator",
+	LoansBoardOfficial = "LoansBoardOfficial",
+	InstitutionAdmin = "InstitutionAdmin",
+	SystemAdmin = "SystemAdmin"
 };

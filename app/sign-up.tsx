@@ -5,12 +5,12 @@ import HeadingText from "@/components/text/HeadingText";
 import TextField from "@/components/TextField";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
 import { authenticationResponse, userCredentials } from "@/dtos/authentication";
-import { urlAccounts, urlStudents, urlUsers } from "@/utils/endpoints";
+import { urlAccounts } from "@/utils/endpoints";
 import { getClaims, saveToken } from "@/utils/handleJWT";
 import { emailPattern, fieldRequired, maxEmailLength, maxPasswordLength, minPasswordLength } from "@/utils/validation";
 import axios from "axios";
-import { Link, router, useNavigation } from "expo-router";
-import { useContext, useEffect } from "react";
+import { router } from "expo-router";
+import { useContext } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
 
@@ -38,15 +38,18 @@ export default function SignUp() {
 	
 	async function registerAccount(credentials: userCredentials) {
 		try {
-			const response = await axios.post<authenticationResponse>(`${urlAccounts}/register`, credentials);
+			const response = await axios.post<authenticationResponse>(`${urlAccounts}/register/students`, credentials);
+			
 			await saveToken(response.data);
 			update(await getClaims());
-			await axios.post(`${urlUsers}`);
-			await axios.post(`${urlStudents}`);
+			
 			router.replace("/home");
-			router.dismissAll();
 		} catch (error: any) {
-			setError("root", { message: error.message });
+			if (error?.response) {
+				setError("root", { message: error.response.data.join("\n") });
+			} else {
+				setError("root", { message: error.message });
+			}
 		}
 	}
 	
@@ -56,10 +59,10 @@ export default function SignUp() {
 	
 	return (
 		<ScrollView className="bg-[#F6F6F6]">
-			<View className="flex flex-col h-screen items-center">
+			<View className="flex flex-col min-h-screen items-center">
 				<Logo center width={128} height={128} margin={64} />
 				
-				<View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }} className="flex-auto w-full min-h-fit p-8 bg-white border-t border-x border-[#959595]">
+				<View style={{ flex: 1, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} className="w-full min-h-fit p-8 bg-white border-t border-x border-[#959595]">
 					<HeadingText>Register Account</HeadingText>
 					
 					<View className="flex flex-col gap-4">
@@ -123,6 +126,8 @@ export default function SignUp() {
 					{
 						errors.root?.message ? <Text className="text-base font-semibold text-red-600">{errors.root?.message}</Text> : <View className="h-[1.5rem]" />
 					}
+					
+					<View className="flex-grow" />
 					
 					<View className="flex flex-col mt-8 mb-12 gap-8 items-center self-center">
 						<PrimaryButton text="Sign Up" onPress={handleSubmit(onSubmit)} />

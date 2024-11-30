@@ -4,3 +4,4 @@ export const urlAccounts = `${baseURL}/accounts`;
 export const urlUsers = `${baseURL}/users`;
 export const urlStudents = `${baseURL}/students`;
 export const urlBondingPeriods = `${baseURL}/bonding-periods`;
+export const urlForms = `${baseURL}/forms`;

@@ -1,12 +1,11 @@
 import DetailsCard from "./DetailsCard";
 import AppText, { fontWeight } from "../text/AppText";
-import DetailNameText from "../text/DetailNameText";
-import { Text } from "react-native";
-import DetailValueText from "../text/DetailValueText";
 import SecondaryButton from "../buttons/SecondaryButton";
+import { guardianModel } from "@/dtos/students";
+import DetailText from "../text/DetailText";
 
 interface GuardianDetailsCardProps {
-	
+	guardianModel: guardianModel,
 }
 
 export default function GuardianDetailsCard(props : GuardianDetailsCardProps) {
@@ -14,38 +13,15 @@ export default function GuardianDetailsCard(props : GuardianDetailsCardProps) {
 		<DetailsCard style={{ gap: 6 }}>
 			<AppText style={{ paddingBottom: 12 }} fontSize={20} lineHeight={24} fontWeight={fontWeight.semibold}>Parent/Guardian Details</AppText>
 			
-			<Text>
-				<DetailNameText>Full Name:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
-			<Text>
-				<DetailNameText>Postal Address:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
-			<Text>
-				<DetailNameText>Physical Address:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
-			<Text>
-				<DetailNameText>Home Village:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
-			<Text>
-				<DetailNameText>Traditional Authority:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
-			<Text>
-				<DetailNameText>District:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
-			<Text>
-				<DetailNameText>Phone number:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
-			<Text>
-				<DetailNameText>Occupation:</DetailNameText>
-				<DetailValueText></DetailValueText>
-			</Text>
+			<DetailText detailName="Full Name:" detailValue={`${props.guardianModel.firstName} ${props.guardianModel.otherNames.join(" ")} ${props.guardianModel.surname}`} />
+			<DetailText detailName="Postal Address:" detailValue={props.guardianModel.postalAddress} />
+			<DetailText detailName="Physical Address:" detailValue={props.guardianModel.physicalAddress} />
+			<DetailText detailName="Home Village:" detailValue={props.guardianModel.homeVillage} />
+			<DetailText detailName="Traditional Authority:" detailValue={props.guardianModel.traditionalAuthority} />
+			<DetailText detailName="District:" detailValue={props.guardianModel.district} />
+			<DetailText detailName="Phone number:" detailValue={props.guardianModel.phoneNumber} />
+			<DetailText detailName="Occupation:" detailValue={props.guardianModel.occupation} />
+			
 			<SecondaryButton text="Edit" />
 		</DetailsCard>
 	);

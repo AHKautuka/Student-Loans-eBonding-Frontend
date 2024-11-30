@@ -1,7 +1,8 @@
 import SecondaryButton from "@/components/buttons/SecondaryButton";
-import AccountDetailsCard from "@/components/cards/AccountDetailsCard";
+import BaseAccountDetailsCard from "@/components/cards/BaseAccountDetailsCard";
 import HeadingText from "@/components/text/HeadingText";
 import AuthenticationContext from "@/contexts/AuthenticationContext";
+import { getUserRoles } from "@/utils/authorized";
 import { getClaims, logOut } from "@/utils/handleJWT";
 import { router } from "expo-router";
 import { useContext } from "react";
@@ -18,7 +19,7 @@ export default function HomePage() {
 		<ScrollView style={{ flexDirection: "column", gap: 20, padding: 32, backgroundColor: "#F6F6F6" }}>
 			<HeadingText>Home</HeadingText>
 			
-			<AccountDetailsCard userEmail={getUserEmail()} />
+			<BaseAccountDetailsCard userEmail={getUserEmail()} roles={getUserRoles(claims)} />
 			
 			<SecondaryButton text="Log Out" onPress={async () => {
 				await logOut();

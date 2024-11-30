@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Image, Text, View } from 'react-native';
-import InputField from '../../components/input-field';
-import Button from '../../components/button';
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import InputField from '@/components/input-field';
+import Button from '@/components/button';
+import Logo from '@/components/Logo';
 
 // Utility function to convert number to words
 const numberToWords = (num: number): string => {
@@ -119,13 +120,14 @@ export default function LoanAmount() {
   return (
     <SafeAreaView className="flex-1 justify-center items-center p-5 bg-white">
       <Text className="text-4xl font-bold mb-4 absolute top-1 left-0 m-5 font-bold">Loan Amount</Text>
-      <Image
-        source={require('../../assets/images/loans-board-logo.jpeg')}
-        className="w-2/4 h-1/4 object-contain mb-5"
+      <Logo
+        width={128}
+        height={128}
+		margin={5}
       />
       <Text className="text-xl font-normal mb-5">Approved Loan Amount</Text>
       <Text className="text-lg font-semibold mb-2">Tuition Amount (in MWK)</Text>
-      <InputField 
+      <InputField
         placeholder='Enter Tuition Amount (e.g., 15000)' 
         value={tuitionAmount} 
         onChangeText={setTuitionAmount} 
