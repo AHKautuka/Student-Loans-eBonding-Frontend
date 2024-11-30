@@ -5,7 +5,7 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import { urlAccounts } from '@/utils/endpoints';
 
-export default function GuardianDetails() {}
+export default function GuardianDetails() {
     const [fullName, setFullName] = useState('');
     const [PostalAdress, setPostalAdress] = useState('');
     const [PhysicalAdress, setPhysicalAdress] = useState('');
@@ -25,8 +25,6 @@ export default function GuardianDetails() {}
         setOccupation('');
         setPhoneNumber('');
 
-
-        
         Toast.show({
             type: 'info',
             text1: 'Changes Reset',
@@ -46,21 +44,16 @@ export default function GuardianDetails() {}
                 District,
                 Occupation,
                 PhoneNumber,
-            
             })
+			Toast.show({
+				type: 'success',
+				text1: 'Changes Saved',
+				text2: 'Your personal details have been saved successfully.',
+			});
         }catch (error) {
             throw new Error(`Unable to save changes ${error}`)
         }
-
-    const handleSave = () => {
-        // Logic to save changes goes here
-        Toast.show({
-            type: 'success',
-            text1: 'Changes Saved',
-            text2: 'Your personal details have been saved successfully.',
-            
-        });
-    };
+	}
 
     const handleGoBack = () => {
         // Logic to navigate back goes here
